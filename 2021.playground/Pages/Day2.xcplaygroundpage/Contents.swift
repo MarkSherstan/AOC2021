@@ -6,9 +6,9 @@ let directions = try String(contentsOf: url).split(separator: "\n")
 
 // Initialize counter
 struct Position {
-    var forward = 0;
-    var up = 0;
-    var down = 0;
+    var horizontal = 0;
+    var depth = 0;
+    var aim = 0;
 }
 
 var position = Position()
@@ -18,20 +18,28 @@ for direction in directions {
     switch direction {
         case _ where direction.contains("forward"):
             let separated = direction.split(separator: " ")
-            position.forward += Int(separated[1])!
+            position.horizontal += Int(separated[1])!
         
+            // Part 2
+            position.depth += position.aim * Int(separated[1])!
         case _ where direction.contains("up"):
             let separated = direction.split(separator: " ")
-            position.up += Int(separated[1])!
-            
+//            Part 1
+//            position.depth -= Int(separated[1])!
+        
+            // Part 2
+            position.aim -= Int(separated[1])!
         case _ where direction.contains("down"):
             let separated = direction.split(separator: " ")
-            position.down += Int(separated[1])!
+//            Part 1
+//            position.depth += Int(separated[1])!
         
+            // Part 2
+            position.aim += Int(separated[1])!
         default:
             print("Error")
         }
 }
 
 // Print result
-print("Part 1: ", position.forward * (position.down - position.up))
+print("Part 1 and 2: ", position.horizontal * position.depth)
