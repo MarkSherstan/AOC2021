@@ -22,6 +22,8 @@ for i in 0..<bingoCards {
     }
 }
 
+var matrix = Matrix(matrix: input)
+
 // Structure to save the data
 struct Matrix {
     var matrix: [[[Int]]]
@@ -64,9 +66,10 @@ func checkValue(mat: Matrix, check: Int) -> [[[Int]]] {
 }
 
 // See if there is a bingo
-func bingo(mat: Matrix) -> Int {
+func bingo(mat: Matrix) -> [Int] {
     var sum = 0
-
+    var bingos = [Int]()
+    
     // Check rows
     for i in 0..<mat.mats! {
         for j in 0..<mat.rows! {
@@ -74,7 +77,7 @@ func bingo(mat: Matrix) -> Int {
                 sum += mat.boolMatrix![i][j][k]
             }
             if sum == mat.rows! {
-                return i
+                bingos.append(i)
             } else {
                 sum = 0
             }
@@ -88,14 +91,14 @@ func bingo(mat: Matrix) -> Int {
                 sum += mat.boolMatrix![i][k][j]
             }
             if sum == mat.cols! {
-                return i
+                bingos.append(i)
             } else {
                 sum = 0
             }
         }
     }
 
-    return -1
+    return bingos
 }
 
 // Calculate score
@@ -113,21 +116,25 @@ func score(mat: Matrix, matNum: Int, callNum: Int) -> Int {
     return sum * callNum
 }
 
-// Calculation
-var matrix = Matrix(matrix: input)
-var finalVal: Int?
-var finalMatrix: Int?
+// Part 1 and 2
+var scoreArray = [Int](repeating: 0, count: matrix.mats!)
+var winArray = [Int]()
 
-// Loop through test array
 for i in 0..<testArray.count {
     matrix.boolMatrix = checkValue(mat: matrix, check: testArray[i])
-    finalMatrix = bingo(mat: matrix)
+    let bingoCardsWon = bingo(mat: matrix)
+        
+    for j in 0..<bingoCardsWon.count {
+        if scoreArray[bingoCardsWon[j]] == 0 {
+            scoreArray[bingoCardsWon[j]] = score(mat: matrix, matNum: bingoCardsWon[j], callNum: testArray[i])
+            winArray.append(bingoCardsWon[j])
+        }
+    }
     
-    if finalMatrix != -1 {
-        finalVal = testArray[i]
+    if scoreArray.contains(0) == false {
         break
     }
 }
 
-// Print results
-print("Part 1: ", score(mat: matrix, matNum: finalMatrix!, callNum: finalVal!))
+print("Part 1: ", scoreArray[winArray.first!])
+print("Part 2: ", scoreArray[winArray.last!])
