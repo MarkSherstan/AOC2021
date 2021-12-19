@@ -32,7 +32,7 @@ for timer in timers {
 for _ in 0..<80 {
     for fish in lanternFish {
         if fish.age() {
-            lanternFish.append(LanternFish(timer: 8))
+            (lanternFish.append(LanternFish(timer: 8)))
         }
     }
 }
