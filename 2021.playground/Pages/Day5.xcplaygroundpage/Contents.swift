@@ -33,32 +33,39 @@ var grid = Array(repeating: Array(repeating: 0, count: xMax), count: yMax)
 
 // Loop through grid and populate coords
 for i in 0..<text.count {
+    // Coords
     let x1 = coords.x1[i]
     let y1 = coords.y1[i]
     let x2 = coords.x2[i]
     let y2 = coords.y2[i]
     
-    var rows: ClosedRange<Int>
-    var cols: ClosedRange<Int>
+    // Set up paths
+    var rows: StrideThrough<Int>
+    var cols: StrideThrough<Int>
     
-    // Only select straight lines
-    if (x1 == x2) || (y1 == y2) {
-        if x1 < x2 {
-            cols = x1...x2
-        } else {
-            cols = x2...x1
-        }
-        
-        if y1 < y2 {
-            rows = y1...y2
-        } else {
-            rows = y2...y1
-        }
+    if x1 < x2 {
+        cols = stride(from: x1, through: x2, by: 1)
+    } else {
+        cols = stride(from: x1, through: x2, by: -1)
+    }
 
+    if y1 < y2 {
+        rows = stride(from: y1, through: y2, by: 1)
+    } else {
+        rows = stride(from: y1, through: y2, by: -1)
+    }
+    
+    // Part 1: Only select straight lines
+    if (x1 == x2) || (y1 == y2) {
         for row in rows {
             for col in cols {
                 grid[row][col] += 1
             }
+        }
+    } else {
+        // Part 2: Diagonal included
+        for (row, col) in zip(rows, cols) {
+            grid[row][col] += 1
         }
     }
 }
@@ -67,8 +74,7 @@ for i in 0..<text.count {
 var overlap = 0;
 for i in 0..<grid.count {
     overlap += grid[i].filter{$0 >= 2}.count
-//    print(grid[i])
 }
 
 // Print results
-print("Part 1: ", overlap)
+print("Part 1 | 2: ", overlap)
