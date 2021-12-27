@@ -2,9 +2,11 @@ import Foundation
 
 let startTime = NSDate()
 
-PlayGround.run()
+let day7 = Day7()
+day7.part1()
+day7.part2()
 
 let endTime = NSDate()
 let interval = endTime.timeIntervalSince(startTime as Date)
 
-print(interval)
+print("Time (seconds): ", String(format:"%.3f", interval))
