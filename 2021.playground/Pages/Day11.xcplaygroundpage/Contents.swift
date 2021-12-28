@@ -60,7 +60,8 @@ func flash(x: Int, y: Int) {
 }
 
 // Main simulation
-for _ in 0..<100 {
+var step = 1
+while(true) {
     // Perform the flashes
     for row in 0..<matrix.rows! {
         for col in 0..<matrix.cols! {
@@ -77,6 +78,17 @@ for _ in 0..<100 {
         }
     }
     matrix.resetBoolMatrix()
+    
+    // Exit conditions
+    if step == 100 {
+        print("Part 1: ", counter)
+    }
+    
+    if Set(matrix.matrix.reduce([], +)).count == 1 {
+        print("Part 2: ", step)
+        break
+    }
+    
+    // Increment step count
+    step += 1
 }
-
-print("Part 1: ", counter)
