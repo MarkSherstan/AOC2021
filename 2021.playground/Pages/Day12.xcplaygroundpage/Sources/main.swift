@@ -93,11 +93,13 @@ public class Day12 {
     // Main logic
     func generateAllPaths(isPart2: Bool) -> Int {
         // Add the data
-        for (u, v) in zip(U, V) {
-            addNode(u: mapping[u]!, v: mapping[v]!)
-            addNode(u: mapping[v]!, v: mapping[u]!)
+        if nodeDictionary.isEmpty {
+            for (u, v) in zip(U, V) {
+                addNode(u: mapping[u]!, v: mapping[v]!)
+                addNode(u: mapping[v]!, v: mapping[u]!)
+            }
         }
-        
+
         // Initialize variables
         var visited = Array(repeating: false, count: mapping.count)
         
@@ -112,6 +114,6 @@ public class Day12 {
 
     // Part 2
     public func part2() {
-        print("Part 2: ", 000)
+        print("Part 1: ", generateAllPaths(isPart2: true))
     }
 }
