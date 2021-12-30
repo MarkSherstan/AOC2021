@@ -52,31 +52,46 @@ public class Day12 {
     }
 
     // Recursive path builder
-    func pathBuilder(u: Int, d: Int, visited: inout [Bool], path: inout [Int]) {
-        // Mark visited if a small cave
+    func pathBuilder(u: Int, visited: inout [Bool], twice: Bool) -> Int {
+        // End condition
+        if u == mapping["end"] {
+            return 1
+        }
+        
+        // Mark a small cave
         if smallCaves.contains(u) {
             visited[u] = true
         }
-        path.append(u)
         
-        // Try and reach the destination
-        if u == d {
-            masterPathArray.append(path)
-        } else {
-            for v in nodeDictionary[u]! {
-                if visited[v] == false {
-                    pathBuilder(u: v, d: d, visited: &visited, path: &path)
-                }
+        // Total
+        var total = 0
+        
+        // Run through connected nodes
+        for v in nodeDictionary[u]! {
+            if (visited[v] == false) {
+                total += pathBuilder(u: v, visited: &visited, twice: twice)
             }
         }
         
-        // Remove current node and label as unvisited to force a new solution
-        path.removeLast()
-        visited[u] = false
+        // If we can visit a cave twice
+        if twice {
+            for v in nodeDictionary[u]! {
+                if visited[v] == true && v != mapping["start"] {
+                    total += pathBuilder(u: v, visited: &visited, twice: false)
+                }
+            }
+        }
+
+        // Mark as false for future solutions
+        if !twice {
+            visited[u] = false
+        }
+        
+        return total
     }
 
     // Main logic
-    func generateAllPaths(start: Int, end: Int, numNodes: Int) {
+    func generateAllPaths(isPart2: Bool) -> Int {
         // Add the data
         for (u, v) in zip(U, V) {
             addNode(u: mapping[u]!, v: mapping[v]!)
@@ -84,18 +99,15 @@ public class Day12 {
         }
         
         // Initialize variables
-        var visited = Array(repeating: false, count: numNodes)
-        var path = [Int]()
+        var visited = Array(repeating: false, count: mapping.count)
         
-        // Start the path builder
-        pathBuilder(u: start, d: end, visited: &visited, path: &path)
+        // Return total paths from path builder
+        return pathBuilder(u: mapping["start"]!, visited: &visited, twice: isPart2)
     }
 
     // Part 1
-    public func part1() {        
-        // Run the path builder and print results
-        generateAllPaths(start: mapping["start"]!, end: mapping["end"]!, numNodes: mapping.count)
-        print("Part 1: ", masterPathArray.count)
+    public func part1() {
+        print("Part 1: ", generateAllPaths(isPart2: false))
     }
 
     // Part 2
