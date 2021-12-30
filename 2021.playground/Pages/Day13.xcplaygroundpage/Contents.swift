@@ -22,20 +22,6 @@ for (X, Y) in zip(x, y) {
     mat[Y][X] = 1
 }
 
-// Get instructions
-x.removeAll()
-y.removeAll()
-for fold in folds {
-    let instructions = fold.split(separator: "=")
-    if instructions[0].contains("x") {
-        x.append(Int(instructions[1])!)
-        y.append(-1)
-    } else {
-        x.append(-1)
-        y.append(Int(instructions[1])!)
-    }
-}
-
 // Flip y
 func flipY(fold: Int, mat: [[Int]]) -> [[Int]] {
     // Initial params
@@ -88,20 +74,30 @@ func flipX(fold: Int, mat: [[Int]]) -> [[Int]] {
 }
 
 // Hard code part 1 for now
-mat = flipX(fold: x[0], mat: mat)
-var reduced = mat.reduce([], +)
-print("Part 1: ", reduced.filter{$0 > 0}.count)
+//mat = flipX(fold: x[0], mat: mat)
+//var reduced = mat.reduce([], +)
+//print("Part 1: ", reduced.filter{$0 > 0}.count)
 
-
-// Guessing this is part 2... Perform the folds
-for (X, Y) in zip(x, y) {
-    if X == -1 {
-        // Fold y
-        mat = flipY(fold: Y, mat: mat)
-        break
+// Loop through fold instructions
+for fold in folds {
+    let instructions = fold.split(separator: "=")
+    if instructions[0].contains("x") {
+        mat = flipX(fold: Int(instructions[1])!, mat: mat)
+    } else if instructions[0].contains("y") {
+        mat = flipY(fold: Int(instructions[1])!, mat: mat)
     } else {
-        // Fold x
-        mat = flipY(fold: X, mat: mat)
-        break
+        print("Error")
     }
+}
+
+// Print results
+for row in mat {
+    for c in row {
+        if c > 0 {
+            print("#", terminator: "")
+        } else {
+            print(".", terminator: "")
+        }
+    }
+    print()
 }
