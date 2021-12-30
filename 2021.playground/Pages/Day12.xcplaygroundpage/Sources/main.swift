@@ -52,7 +52,7 @@ public class Day12 {
     }
 
     // Recursive path builder
-    func pathBuilder(u: Int, visited: inout [Bool], twice: Bool) -> Int {
+    func pathBuilder(u: Int, visited: inout Set<Int>, twice: Bool) -> Int {
         // End condition
         if u == mapping["end"] {
             return 1
@@ -60,7 +60,7 @@ public class Day12 {
         
         // Mark a small cave
         if smallCaves.contains(u) {
-            visited[u] = true
+            visited.insert(u)
         }
         
         // Total
@@ -68,7 +68,7 @@ public class Day12 {
         
         // Run through connected nodes
         for v in nodeDictionary[u]! {
-            if (visited[v] == false) {
+            if (!visited.contains(v)) {
                 total += pathBuilder(u: v, visited: &visited, twice: twice)
             }
         }
@@ -76,7 +76,7 @@ public class Day12 {
         // If we can visit a cave twice
         if twice {
             for v in nodeDictionary[u]! {
-                if visited[v] == true && v != mapping["start"] {
+                if visited.contains(v) && v != mapping["start"] {
                     total += pathBuilder(u: v, visited: &visited, twice: false)
                 }
             }
@@ -84,7 +84,7 @@ public class Day12 {
 
         // Mark as false for future solutions
         if !twice {
-            visited[u] = false
+            visited.remove(u)
         }
         
         return total
@@ -101,7 +101,7 @@ public class Day12 {
         }
 
         // Initialize variables
-        var visited = Array(repeating: false, count: mapping.count)
+        var visited = Set<Int>()
         
         // Return total paths from path builder
         return pathBuilder(u: mapping["start"]!, visited: &visited, twice: isPart2)
@@ -114,6 +114,6 @@ public class Day12 {
 
     // Part 2
     public func part2() {
-        print("Part 1: ", generateAllPaths(isPart2: true))
+        print("Part 2: ", generateAllPaths(isPart2: true))
     }
 }
