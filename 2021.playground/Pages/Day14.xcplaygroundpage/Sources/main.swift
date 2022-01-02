@@ -2,7 +2,7 @@ import Foundation
 
 public class Day14 {
     var polymer: [Character]
-    var mapping: [String: Character] = [:]
+    var insertRules: [String: Character] = [:]
 
     // Read in data
     public init() {
@@ -14,43 +14,76 @@ public class Day14 {
 
         for entry in template {
             let split = entry.components(separatedBy: " -> ")
-            let key = Character(split[1])
+            let pointer = Character(split[1])
             let elements = split[0]
 
-            self.mapping[elements] = key
+            self.insertRules[elements] = pointer
         }
-
     }
     
-    func simulate(numDays: Int) {
-        // Grow the polymer
-        for day in 1...numDays {
-            var low = 0
-            var high = 1
+    // Quick function for adding a polymer to the dict
+    func addPolymer(polymerDict: inout [String: Int], key: String, count: Int) {
+        if polymerDict[key] == nil {
+            polymerDict[key] = count
+        } else {
+            polymerDict[key]! += count
+        }
+    }
+    
+    // Quick function for adding an element to the dict
+    func addElement(elementDict: inout [Character: Int], key: Character, count: Int) {
+        if elementDict[key] == nil {
+            elementDict[key] = count
+        } else {
+            elementDict[key]! += count
+        }
+    }
+
+    // Simulate steps
+    func simulate(polymer: [Character], numSteps: Int) -> Int {
+        // Dictionaries
+        var polymerDict: [String: Int] = [:]
+        var polymerDict2: [String: Int] = [:]
+
+        // Initial polymer dict
+        for i in 0..<polymer.count-1 {
+            let key = String(polymer[i]) + String(polymer[i+1])
             
-            for _ in 0..<polymer.count-1 {
-                let elements = String(polymer[low]) + String(polymer[high])
-                polymer.insert(mapping[elements]!, at: high)
+            addPolymer(polymerDict: &polymerDict, key: key, count: 1)
+        }
+        
+        // The polymer
+        for _ in 1...numSteps {
+            for (key, value) in polymerDict {
+                let firstPair = String(key[key.startIndex]) + String(insertRules[key]!)
+                let secondPair = String(insertRules[key]!) + String(key[key.index(before: key.endIndex)])
                 
-                // Index
-                low += 2
-                high += 2
+                addPolymer(polymerDict: &polymerDict2, key: firstPair, count: value)
+                addPolymer(polymerDict: &polymerDict2, key: secondPair, count: value)
             }
             
-            print(day, polymer.count)
+            polymerDict = polymerDict2
+            polymerDict2 = [:]
         }
+        
+        // Get elements
+        var elementDict: [Character: Int] = [polymer[polymer.count-1]: 1]
+        for (key, value) in polymerDict {
+            let elem = key[key.startIndex]
+            addElement(elementDict: &elementDict, key: elem, count: value)
+        }
+        
+        // Solution
+        return elementDict.values.max()! - elementDict.values.min()!
     }
 
     // Part 1
     public func part1() {
-        simulate(numDays: 10)
-        let mappedItems = polymer.map { ($0, 1) }
-        let counts = Dictionary(mappedItems, uniquingKeysWith: +)
-        print("Part 1: ", counts.values.max()! - counts.values.min()!)
+        print("Part 1: ", simulate(polymer: polymer, numSteps: 10))
     }
 
     // Part 2
     public func part2() {
-        print("Part 2: ", 000)
+        print("Part 2: ", simulate(polymer: polymer, numSteps: 40))
     }
 }
