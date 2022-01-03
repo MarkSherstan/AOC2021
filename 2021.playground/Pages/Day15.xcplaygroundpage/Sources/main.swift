@@ -39,6 +39,74 @@ public class Day15 {
         self.matrix = Matrix(matrix: mat)
     }
     
+    // Fill the entire top grid
+    func fillTop(row: Int, col: Int, superMatrix: inout [[Int]]) {
+        // Initial values
+        var riskLevel = matrix.matrix[row][col]
+        var riskLevelArray = [Int]()
+        
+        // Build out values to populate
+        for _ in 0..<5 {
+            // Save risk level
+            riskLevelArray.append(riskLevel)
+            
+            // Increment risk level
+            riskLevel += 1
+            if riskLevel > 9 {riskLevel = 1}
+        }
+        
+        // Complete entire top row
+        let colIdx = stride(from: col, to: 5 * matrix.cols, by: matrix.cols)
+        for (riskValue, col) in zip(riskLevelArray, colIdx) {
+            superMatrix[row][col] = riskValue
+        }
+    }
+    
+    // Fill all columns
+    func fillVertical(row: Int, col: Int, superMatrix: inout [[Int]]) {
+        // Initial values
+        var riskLevel = superMatrix[row][col]
+        var riskLevelArray = [Int]()
+        
+        // Build out values to populate
+        for _ in 0..<5 {
+            // Save risk level
+            riskLevelArray.append(riskLevel)
+            
+            // Increment risk level
+            riskLevel += 1
+            if riskLevel > 9 {riskLevel = 1}
+        }
+        
+        // Complete entire top row
+        let rowIdx = stride(from: row, to: 5 * matrix.rows, by: matrix.rows)
+        for (riskValue, row) in zip(riskLevelArray, rowIdx) {
+            superMatrix[row][col] = riskValue
+        }
+    }
+    
+    func buildSuperMatrix(matrix: Matrix) -> Matrix {
+        // Initialize super matrix
+        var superMatrix = Array(repeating: Array(repeating: 0, count: matrix.rows * 5), count: matrix.cols * 5)
+        
+        // Populate top row
+        for row in 0..<matrix.rows {
+            for col in 0..<matrix.cols {
+                fillTop(row: row, col: col, superMatrix: &superMatrix)
+            }
+        }
+        
+        // Populate remaining rows
+        for row in 0..<matrix.rows {
+            for col in 0..<superMatrix[0].endIndex {
+                fillVertical(row: row, col: col, superMatrix: &superMatrix)
+            }
+        }
+        
+        // Save super matrix into struct and return
+        return Matrix(matrix: superMatrix)
+    }
+    
     // Dijkstra algorithm
     func djk(matrix: inout Matrix) -> Int {
         // Directions to check
@@ -98,6 +166,7 @@ public class Day15 {
     
     // Part 2
     public func part2() {
-        print("Part 2: ", 000)
+        var superMatrix = buildSuperMatrix(matrix: matrix)
+        print("Part 2: ", djk(matrix: &superMatrix))
     }
 }
