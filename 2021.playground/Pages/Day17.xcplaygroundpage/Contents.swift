@@ -4,7 +4,7 @@ let startTime = NSDate()
 
 let day17 = Day17()
 day17.part1()
-//day17.part2()
+day17.part2()
 
 let endTime = NSDate()
 let interval = endTime.timeIntervalSince(startTime as Date)
