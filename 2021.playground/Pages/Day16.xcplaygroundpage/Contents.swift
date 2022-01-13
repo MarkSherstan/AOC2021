@@ -36,37 +36,76 @@ for hex in msgHex[0] {
     msgBin.append(contentsOf: hex2bin[String(hex)]!)
 }
 
-// Header Data
-let packetVerion = Int(msgBin[0..<3].joined(), radix: 2)!
-let packetType = Int(msgBin[3..<6].joined(), radix: 2)!
+// Get version number
+func getVersionNumber(msg: inout [String]) -> Int {
+    let V = Int(msg[0..<3].joined(), radix: 2)!
+    msg.removeSubrange(0..<3)
+    
+    return V
+}
+
+// Get packet number
+func getPacketNumber(msg: inout [String]) -> Int {
+    let P = Int(msg[0..<3].joined(), radix: 2)!
+    msg.removeSubrange(0..<3)
+    
+    return P
+}
 
 // Get literal value
-func literal(msg: [String]) -> Int {
-    let msgLocal = Array(msg.dropFirst(6))
-    let msgChunk = msgLocal.chunked(into: 5)
+func literal(msg: inout [String]) -> Int {
+    // Split message and init bits
+    let msgChunk = msg.chunked(into: 5)
     var bits = [String]()
     
+    // Loop through the chunks
     for chunk in msgChunk {
         if chunk[0] == "1" {
             bits.append(contentsOf: chunk[1..<5])
+            msg.removeSubrange(0..<5)
         } else {
             bits.append(contentsOf: chunk[1..<5])
+            msg.removeSubrange(0..<5)
+            break
+        }
+    }
+        
+    // Zero garbadge collection
+    while true {
+        if msg.isEmpty {
+            break
+        } else if msg[0] == "0" {
+            msg.removeFirst()
+        } else {
             break
         }
     }
     
+    // Answer
     return Int(bits.joined(), radix: 2)!
 }
 
-// Sort out packets
-if packetType == 4 {
-    print(literal(msg: msgBin))
-} else {
-    if msgBin[6] == "0" {
-        let lengthTypeId = Int(msgBin[7...21].joined(), radix: 2)!
-        print(msgBin[7...21], msgBin[7...21].count, lengthTypeId)
+// Main logic
+var packetVerionSum = 0
+
+while !msgBin.isEmpty {
+    // Header Data
+    packetVerionSum += getVersionNumber(msg: &msgBin)
+    let packetType = getPacketNumber(msg: &msgBin)
+    
+    // Sort out packets
+    if packetType == 4 {
+        print(literal(msg: &msgBin))
     } else {
-        let lengthTypeId = Int(msgBin[7...17].joined(), radix: 2)!
-        print(msgBin[7...21], msgBin[7...17].count, lengthTypeId)
+        if msgBin[6] == "0" {
+            let lengthTypeId = Int(msgBin[7...21].joined(), radix: 2)!
+            print(msgBin[7...21], msgBin[7...21].count, lengthTypeId)
+        } else {
+            let lengthTypeId = Int(msgBin[7...17].joined(), radix: 2)!
+            print(msgBin[7...21], msgBin[7...17].count, lengthTypeId)
+        }
     }
+
 }
+
+print("Part 1: ", packetVerionSum)
