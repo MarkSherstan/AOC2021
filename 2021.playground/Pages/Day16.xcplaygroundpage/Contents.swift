@@ -69,7 +69,7 @@ func literal(msg: inout [String]) -> Int {
             break
         }
     }
-        
+    
     // Zero garbage collection
     if !msg.contains("1") {
         msg.removeAll()
@@ -79,43 +79,84 @@ func literal(msg: inout [String]) -> Int {
     return Int(bits.joined(), radix: 2)!
 }
 
+func evaluateExpression(packetType: Int, results: [Int]) -> Int {
+    switch packetType {
+    case 0: // Sum
+        return results.reduce(0, +)
+    case 1: // Product
+        return results.reduce(1, *)
+    case 2: // Min
+        return results.min()!
+    case 3: // Max
+        return results.max()!
+    case 5: // Greater than
+        if results[0] > results[1] {
+            return 1
+        } else {
+            return 0
+        }
+    case 6: // Less than
+        if results[0] < results[1] {
+            return 1
+        } else {
+            return 0
+        }
+    case 7: // Equal
+        if results[0] == results[1] {
+            return 1
+        } else {
+            return 0
+        }
+    default:
+        print("Error")
+        return -1
+    }
+}
 
 // Total version sum
 var packetVerionSum = 0
 
 // Recursive function for dealing with layered messages
-func run() {
+func run() -> Int {
     // Header Data
     packetVerionSum += getVersionNumber(msg: &msgBin)
     let packetType = getPacketNumber(msg: &msgBin)
-        
+    
     // Sort out packets
     if packetType == 4 {
-        print(literal(msg: &msgBin))
+        return literal(msg: &msgBin)
     } else {
         if msgBin.removeFirst() == "0" {
             let bitLengthParse = Int(msgBin[0..<15].joined(), radix: 2)!
             msgBin.removeSubrange(0..<15)
             let count = msgBin.count - bitLengthParse
+            var results = [Int]()
             
             while msgBin.count > count {
-                run()
+                results.append(run())
             }
+            
+            return evaluateExpression(packetType: packetType, results: results)
         } else {
             let subPacketCount = Int(msgBin[0..<11].joined(), radix: 2)!
             msgBin.removeSubrange(0..<11)
+            var results = [Int]()
             
             for _ in 0..<subPacketCount {
-                run()
+                results.append(run())
             }
+            
+            return evaluateExpression(packetType: packetType, results: results)
         }
     }
 }
 
 // Run until we have parsed everything
+var evaluate = 0
 while !msgBin.isEmpty {
-    run()
+    evaluate = run()
 }
 
 // Results
 print("Part 1: ", packetVerionSum)
+print("Part 2: ", evaluate)
