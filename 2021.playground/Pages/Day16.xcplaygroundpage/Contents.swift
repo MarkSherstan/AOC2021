@@ -70,42 +70,52 @@ func literal(msg: inout [String]) -> Int {
         }
     }
         
-    // Zero garbadge collection
-    while true {
-        if msg.isEmpty {
-            break
-        } else if msg[0] == "0" {
-            msg.removeFirst()
-        } else {
-            break
-        }
+    // Zero garbage collection
+    if !msg.contains("1") {
+        msg.removeAll()
     }
     
     // Answer
     return Int(bits.joined(), radix: 2)!
 }
 
-// Main logic
+
+// Total version sum
 var packetVerionSum = 0
 
-while !msgBin.isEmpty {
+// Recursive function for dealing with layered messages
+func run() {
     // Header Data
     packetVerionSum += getVersionNumber(msg: &msgBin)
     let packetType = getPacketNumber(msg: &msgBin)
-    
+        
     // Sort out packets
     if packetType == 4 {
         print(literal(msg: &msgBin))
     } else {
-        if msgBin[6] == "0" {
-            let lengthTypeId = Int(msgBin[7...21].joined(), radix: 2)!
-            print(msgBin[7...21], msgBin[7...21].count, lengthTypeId)
+        if msgBin.removeFirst() == "0" {
+            let bitLengthParse = Int(msgBin[0..<15].joined(), radix: 2)!
+            msgBin.removeSubrange(0..<15)
+            let count = msgBin.count - bitLengthParse
+            
+            while msgBin.count > count {
+                run()
+            }
         } else {
-            let lengthTypeId = Int(msgBin[7...17].joined(), radix: 2)!
-            print(msgBin[7...21], msgBin[7...17].count, lengthTypeId)
+            let subPacketCount = Int(msgBin[0..<11].joined(), radix: 2)!
+            msgBin.removeSubrange(0..<11)
+            
+            for _ in 0..<subPacketCount {
+                run()
+            }
         }
     }
-
 }
 
+// Run until we have parsed everything
+while !msgBin.isEmpty {
+    run()
+}
+
+// Results
 print("Part 1: ", packetVerionSum)
