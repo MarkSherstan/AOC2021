@@ -19,7 +19,7 @@ for pair in str2num { num2str[pair.value] = pair.key }
 
 // Import data
 let url = Bundle.main.url(forResource: "input", withExtension: "txt")!
-let nums = try String(contentsOf: url).split(separator: "\n")
+let snailNums = try String(contentsOf: url).split(separator: "\n")
 
 // Convert string to numeric array
 func stringToNumArray(numString: String) -> [Int] {
@@ -70,21 +70,37 @@ func split(snailFishNum: String) -> String {
     return numArrayToString(numArray: numArray)
 }
 
-//func reduce(input: String) -> String {
-//    <#function body#>
-//}
-
-//func explode(<#parameters#>) {
+//func explode(parameters) {
 ////    To explode a pair, the pair's left value is added to the first regular number to the left of the exploding pair (if any), and the pair's right value is added to the first regular number to the right of the exploding pair (if any). Exploding pairs will always consist of two regular numbers. Then, the entire exploding pair is replaced with the regular number 0.
 //}
 
+// Snail fish reduction
+func reduce(input: String) -> String {
+    var currentString = input
+    var previousString = ""
+    
+    while true {
+        currentString = split(snailFishNum: currentString)
+        
+        if currentString == previousString {
+            return currentString
+        }
+        
+        previousString = currentString
+    }
+}
+
+
 // Main loop
-let A = String(nums[0])
-let B = String(nums[1])
-let C = add(A: A, B: B)
-let D = split(snailFishNum: C)
+var masterNum = String(snailNums[0])
+for i in 1..<snailNums.count {
+    masterNum = add(A: masterNum, B: String(snailNums[i]))
+    masterNum = reduce(input: masterNum)
+}
+
+let A = String(snailNums[0])
+let B = String(snailNums[1])
 
 print(A)
 print(B)
-print(C)
-print(D)
+print(masterNum)
