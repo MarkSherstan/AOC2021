@@ -32,19 +32,22 @@ func numArrayToString(numArray: [Int]) -> String {
 }
 
 // Add two snail fish numbers together
-func add(A: String, B: String) -> String {
-    var result = "[" + B + "]"
+func add(A: [Int], B: [Int]) -> [Int] {
+    var result = B
+    result.insert(str2num["["]!, at: result.startIndex)
+    result.insert(str2num["]"]!, at: result.endIndex)
+    
+    var newElement = A
+    newElement.append(str2num[","]!)
+    
     let idx = result.index(result.startIndex, offsetBy: 1)
-
-    result.insert(contentsOf: A + ",", at: idx)
+    result.insert(contentsOf: newElement, at: idx)
     
     return result
 }
 
 // Split a snail fish number
-func split(snailFishNum: String) -> String {
-    var numArray = stringToNumArray(numString: snailFishNum)
-    
+func split(numArray: inout [Int]) {
     if let idx = numArray.firstIndex(where: { $0 >= 10 }) {
         let left = Int(floor(Double(numArray[idx] / 2)))
         let right = Int(ceil(Double(numArray[idx] / 2)))
@@ -56,13 +59,10 @@ func split(snailFishNum: String) -> String {
         
         numArray.remove(at: idx + 5)
     }
-    
-    return numArrayToString(numArray: numArray)
 }
 
 // Explode a snail fish number
-func explode(snailFishNum: String) -> String {
-    var numArray = stringToNumArray(numString: snailFishNum)
+func explode(numArray: inout [Int]) {
     let numIdxs = numArray.indices.filter {numArray[$0] >= 0}
     var count = 0
     
@@ -98,56 +98,37 @@ func explode(snailFishNum: String) -> String {
                 }
                 numArray[idx - 1] = 0
                 
-                // Return
-                return numArrayToString(numArray: numArray)
+                // Exit
+                return
             }
         }
     }
-    
-    return numArrayToString(numArray: numArray)
 }
 
 // Snail fish reduction
-func reduce(input: String) -> String {
-    var currentString = input
-    var previousString = ""
-    
-    print("Start String: \t", currentString)
-    var ii = 0
+func reduce(input: [Int]) -> [Int] {
+    var current = input
+    var previous = [Int]()
     
     while true {
-        currentString = explode(snailFishNum: currentString)
-        print("Explode \(ii): \t\t", currentString)
+        explode(numArray: &current)
+        split(numArray: &current)
         
-        currentString = split(snailFishNum: currentString)
-        print("Split \(ii): \t\t", currentString)
-        
-        if currentString == previousString {
-            return currentString
+        if current == previous {
+            return current
         }
         
-        previousString = currentString
-        ii += 1
+        previous = current
     }
 }
 
-
 // Main loop
-var masterNum = String(snailNums[0])
+var masterArray = stringToNumArray(numString: String(snailNums[0]))
+
 for i in 1..<snailNums.count {
-    masterNum = add(A: masterNum, B: String(snailNums[i]))
-    masterNum = reduce(input: masterNum)
+    masterArray = add(A: masterArray, B: stringToNumArray(numString: String(snailNums[i])))
+    masterArray = reduce(input: masterArray)
 }
 
-print("Result:\t\t\t", masterNum)
-
-
-//after addition: [[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]
-
-//after explode:  [[[[0,7],4],[7,[[8,4],9]]],[1,1]]
-//after explode:  [[[[0,7],4],[15,[0,13]]],[1,1]]
-
-//after split:    [[[[0,7],4],[[7,8],[0,13]]],[1,1]]
-//after split:    [[[[0,7],4],[[7,8],[0,[6,7]]]],[1,1]]
-
-//after explode:  [[[[0,7],4],[[7,8],[6,0]]],[8,1]]
+print(numArrayToString(numArray: masterArray))
+print("[[[[0,7],4],[[7,8],[6,0]]],[8,1]]")
