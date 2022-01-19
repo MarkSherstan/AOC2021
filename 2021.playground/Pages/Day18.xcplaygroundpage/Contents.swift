@@ -3,17 +3,7 @@ import Foundation
 // Mappings for creating strings or arrays
 let str2num = ["[": -1,
                "]": -2,
-               ",": -3,
-               "0": 0,
-               "1": 1,
-               "2": 2,
-               "3": 3,
-               "4": 4,
-               "5": 5,
-               "6": 6,
-               "7": 7,
-               "8": 8,
-               "9": 9]
+               ",": -3]
 var num2str = [Int: String]()
 for pair in str2num { num2str[pair.value] = pair.key }
 
@@ -25,7 +15,7 @@ let snailNums = try String(contentsOf: url).split(separator: "\n")
 func stringToNumArray(numString: String) -> [Int] {
     var numArray = [Int]()
     for num in numString {
-        numArray.append(str2num[String(num)]!)
+        numArray.append(str2num[String(num)] ?? Int(String(num))!)
     }
     
     return numArray
@@ -35,7 +25,7 @@ func stringToNumArray(numString: String) -> [Int] {
 func numArrayToString(numArray: [Int]) -> String {
     var strArray = [String]()
     for num in numArray {
-        strArray.append(num2str[num]!)
+        strArray.append(num2str[num] ?? String(num))
     }
 
     return strArray.joined()
@@ -55,7 +45,7 @@ func add(A: String, B: String) -> String {
 func split(snailFishNum: String) -> String {
     var numArray = stringToNumArray(numString: snailFishNum)
     
-    if let idx = numArray.firstIndex(where: { $0 >= 9 }) {          // Only for debugging... Change to 10
+    if let idx = numArray.firstIndex(where: { $0 >= 10 }) {
         let left = Int(floor(Double(numArray[idx] / 2)))
         let right = Int(ceil(Double(numArray[idx] / 2)))
         let insert = [-1, left, -3, right, -2]
@@ -70,23 +60,74 @@ func split(snailFishNum: String) -> String {
     return numArrayToString(numArray: numArray)
 }
 
-//func explode(parameters) {
-////    To explode a pair, the pair's left value is added to the first regular number to the left of the exploding pair (if any), and the pair's right value is added to the first regular number to the right of the exploding pair (if any). Exploding pairs will always consist of two regular numbers. Then, the entire exploding pair is replaced with the regular number 0.
-//}
+// Explode a snail fish number
+func explode(snailFishNum: String) -> String {
+    var numArray = stringToNumArray(numString: snailFishNum)
+    let numIdxs = numArray.indices.filter {numArray[$0] >= 0}
+    var count = 0
+    
+    for (idx, x) in numArray.enumerated() {
+        // Count brackets
+        if x == str2num["["]! {
+            count += 1
+        } else if x == str2num["]"]! {
+            count -= 1
+        }
+        
+        // Explode
+        if count < 0 {
+            count = 0
+        } else if count > 4 {
+            // Not a bracket or comma
+            if x >= 0 {
+                // Explode left
+                if numIdxs.contains(where: { $0 < idx }) {
+                    let leftIndex = numIdxs.last(where: { $0 < idx })!
+                    numArray[leftIndex] += numArray[idx]
+                }
+                
+                // Explode right
+                if numIdxs.contains(where: { $0 > idx + 2 }) {
+                    let rightIndex = numIdxs.first(where: { $0 > idx + 2 })!
+                    numArray[rightIndex] += numArray[idx + 2]
+                }
+                
+                // Remove previous grouping and replace with zero
+                for _ in 0..<4 {
+                    numArray.remove(at: idx - 1)
+                }
+                numArray[idx - 1] = 0
+                
+                // Return
+                return numArrayToString(numArray: numArray)
+            }
+        }
+    }
+    
+    return numArrayToString(numArray: numArray)
+}
 
 // Snail fish reduction
 func reduce(input: String) -> String {
     var currentString = input
     var previousString = ""
     
+    print("Start String: \t", currentString)
+    var ii = 0
+    
     while true {
+        currentString = explode(snailFishNum: currentString)
+        print("Explode \(ii): \t\t", currentString)
+        
         currentString = split(snailFishNum: currentString)
+        print("Split \(ii): \t\t", currentString)
         
         if currentString == previousString {
             return currentString
         }
         
         previousString = currentString
+        ii += 1
     }
 }
 
@@ -98,9 +139,15 @@ for i in 1..<snailNums.count {
     masterNum = reduce(input: masterNum)
 }
 
-let A = String(snailNums[0])
-let B = String(snailNums[1])
+print("Result:\t\t\t", masterNum)
 
-print(A)
-print(B)
-print(masterNum)
+
+//after addition: [[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]
+
+//after explode:  [[[[0,7],4],[7,[[8,4],9]]],[1,1]]
+//after explode:  [[[[0,7],4],[15,[0,13]]],[1,1]]
+
+//after split:    [[[[0,7],4],[[7,8],[0,13]]],[1,1]]
+//after split:    [[[[0,7],4],[[7,8],[0,[6,7]]]],[1,1]]
+
+//after explode:  [[[[0,7],4],[[7,8],[6,0]]],[8,1]]
