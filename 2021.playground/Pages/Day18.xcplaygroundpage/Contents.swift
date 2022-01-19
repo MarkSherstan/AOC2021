@@ -49,8 +49,8 @@ func add(A: [Int], B: [Int]) -> [Int] {
 // Split a snail fish number
 func split(numArray: inout [Int]) {
     if let idx = numArray.firstIndex(where: { $0 >= 10 }) {
-        let left = Int(floor(Double(numArray[idx] / 2)))
-        let right = Int(ceil(Double(numArray[idx] / 2)))
+        let left = Int(floor(Double(numArray[idx]) / 2.0))
+        let right = Int(ceil(Double(numArray[idx]) / 2.0))
         let insert = [-1, left, -3, right, -2]
             
         for x in insert.reversed() {
@@ -122,13 +122,45 @@ func reduce(input: [Int]) -> [Int] {
     }
 }
 
+// Magnitude
+func magnitude(snailFishNum: inout [Int]) -> Int {
+    while true {
+        // Magnitude entry
+        for idx in 0..<snailFishNum.count - 4 {
+            if (snailFishNum[idx] == str2num["["]!) && (snailFishNum[idx + 1] >= 0) && (snailFishNum[idx + 2] == str2num[","]!) && (snailFishNum[idx + 3] >= 0) && (snailFishNum[idx + 4] == str2num["]"]!) {
+                // Calculate mag
+                let mag = (3 * snailFishNum[idx + 1]) + (2 * snailFishNum[idx + 3])
+                
+                // Remove and replace old elements
+                for _ in 0..<4 {
+                    snailFishNum.remove(at: idx)
+                }
+                snailFishNum[idx] = mag
+                
+                // Exit out of for loop
+                break
+            }
+        }
+        
+        // Exit condition
+        if snailFishNum.count == 1 {
+            return snailFishNum[0]
+        }
+    }
+}
+
 // Main loop
 var masterArray = stringToNumArray(numString: String(snailNums[0]))
 
 for i in 1..<snailNums.count {
     masterArray = add(A: masterArray, B: stringToNumArray(numString: String(snailNums[i])))
     masterArray = reduce(input: masterArray)
+    print(i, numArrayToString(numArray: masterArray))
 }
 
 print(numArrayToString(numArray: masterArray))
-print("[[[[0,7],4],[[7,8],[6,0]]],[8,1]]")
+print("Part 1: ", magnitude(snailFishNum: &masterArray))
+
+
+//[[[[4,0],[5,4]],[[7,7],[6,0]]],[[[6,6],[5,6]],[[6,0],[6,7,7]]]]]]
+//[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]
