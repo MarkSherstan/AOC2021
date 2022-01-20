@@ -62,24 +62,22 @@ func split(numArray: inout [Int]) {
 }
 
 // Explode a snail fish number
-func explode(numArray: inout [Int]) {
+func explode(numArray: inout [Int]) -> Bool {
     let numIdxs = numArray.indices.filter {numArray[$0] >= 0}
     var count = 0
     
-    for (idx, x) in numArray.enumerated() {
+    for idx in 0..<numArray.count - 3 {
         // Count brackets
-        if x == str2num["["]! {
+        if numArray[idx] == str2num["["]! {
             count += 1
-        } else if x == str2num["]"]! {
+        } else if numArray[idx] == str2num["]"]! {
             count -= 1
         }
         
         // Explode
-        if count < 0 {
-            count = 0
-        } else if count > 4 {
+        if count > 4 {
             // Not a bracket or comma
-            if x >= 0 {
+            if (numArray[idx] >= 0) && (numArray[idx + 1] == str2num[","]!) && (numArray[idx + 2] >= 0) && (numArray[idx + 3] == str2num["]"]!) {
                 // Explode left
                 if numIdxs.contains(where: { $0 < idx }) {
                     let leftIndex = numIdxs.last(where: { $0 < idx })!
@@ -99,10 +97,13 @@ func explode(numArray: inout [Int]) {
                 numArray[idx - 1] = 0
                 
                 // Exit
-                return
+                return false
             }
         }
     }
+    
+    // All explodes satisfied
+    return true
 }
 
 // Snail fish reduction
@@ -110,14 +111,20 @@ func reduce(input: [Int]) -> [Int] {
     var current = input
     var previous = [Int]()
     
+    // Run until we cant reduce anymore
     while true {
-        explode(numArray: &current)
+        // Keep exploding until we cant explode anymore
+        while true {
+            if explode(numArray: &current) {break}
+        }
+
+        // Split
         split(numArray: &current)
         
+        // Exit condition
         if current == previous {
             return current
         }
-        
         previous = current
     }
 }
@@ -155,12 +162,8 @@ var masterArray = stringToNumArray(numString: String(snailNums[0]))
 for i in 1..<snailNums.count {
     masterArray = add(A: masterArray, B: stringToNumArray(numString: String(snailNums[i])))
     masterArray = reduce(input: masterArray)
-    print(i, numArrayToString(numArray: masterArray))
 }
 
+print("[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]")
 print(numArrayToString(numArray: masterArray))
 print("Part 1: ", magnitude(snailFishNum: &masterArray))
-
-
-//[[[[4,0],[5,4]],[[7,7],[6,0]]],[[[6,6],[5,6]],[[6,0],[6,7,7]]]]]]
-//[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]
