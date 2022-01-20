@@ -79,7 +79,7 @@ public class Day18 {
             
             // Explode
             if count > 4 {
-                // Not a bracket or comma
+                // Ensure we are looking at a pair [#,#]
                 if (numArray[idx] >= 0) && (numArray[idx + 1] == str2num[","]!) && (numArray[idx + 2] >= 0) && (numArray[idx + 3] == str2num["]"]!) {
                     // Explode left
                     if numIdxs.contains(where: { $0 < idx }) {
@@ -173,6 +173,30 @@ public class Day18 {
 
     // Part 2
     public func part2() {
-        print("Part 2: ", 000)
+        var largest = 0
+        
+        for A in 0..<snailNums.count-1 {
+            let a = stringToNumArray(numString: String(snailNums[A]))
+            
+            for B in (A+1)..<snailNums.count {
+                let b = stringToNumArray(numString: String(snailNums[B]))
+                
+                // a + b -> Save if big
+                var someNum = reduce(input: add(A: a, B: b))
+                var mag = magnitude(snailFishNum: &someNum)
+                if mag > largest {
+                    largest = mag
+                }
+                
+                // b + a -> Save if big
+                someNum = reduce(input: add(A: b, B: a))
+                mag = magnitude(snailFishNum: &someNum)
+                if mag > largest {
+                    largest = mag
+                }
+            }
+        }
+        
+        print("Part 2: ", largest)
     }
 }
