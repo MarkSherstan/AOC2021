@@ -28,7 +28,7 @@ public class Day20 {
         // Split data input and pad
         self.algorithm = Array(String(input[0]))
         var image = [[Character]]()
-        let padding = 25
+        let padding = 75
         let horizontalPad = Array(repeating: Character("."), count: padding)
         let verticalPad = Array(repeating: Character("."), count: input[1].count + (2 * padding))
 
@@ -49,7 +49,7 @@ public class Day20 {
     }
 
     // Enhance function
-    func enhance(x: Int, y: Int) {
+    func enhance(x: Int, y: Int, loop: Int) {
         // Directions x = cols and y = rows
         let dx = [-1, 0, 1, -1, 0, 1, -1, 0, 1]
         let dy = [-1, -1, -1, 0, 0, 0, 1, 1, 1]
@@ -60,8 +60,13 @@ public class Day20 {
             let xx = x + dirX
             let yy = y + dirY
             
-            if (xx < 0 || xx == matrix.cols) || (yy < 0 || yy == matrix.rows) {
-                bin.append("0")
+            if (xx < 0 || xx >= matrix.cols || yy < 0 || yy >= matrix.rows) {
+                // Infinite helper
+                if loop % 2 == 0 {
+                    bin.append("1")
+                } else {
+                    bin.append("0")
+                }
             } else if matrix.mat[yy][xx] == "#" {
                 bin.append("1")
             } else {
@@ -76,15 +81,15 @@ public class Day20 {
 
     // Part 1
     public func part1() {
-        // Enahnce twice
-        for _ in 1...2 {
+        // Enhance twice
+        for i in 1...2 {
             // Loop through all elements
             for row in 0..<matrix.rows {
                 for col in 0..<matrix.cols {
-                    enhance(x: col, y: row)
+                    enhance(x: col, y: row, loop: i)
                 }
             }
-                
+
             // Update matrix
             matrix.mat = matrix.mat2
         }
