@@ -9,8 +9,8 @@ struct Matrix {
     
     init(matrix: [[Character]]) {
         self.mat = matrix
-        self.rows = matrix.count
-        self.cols = matrix[0].endIndex
+        self.rows = matrix.count        // y
+        self.cols = matrix[0].endIndex  // x
         self.mat2 = Array(repeating: Array(repeating: Character("."), count: self.cols), count: self.rows)
     }
 }
@@ -28,19 +28,19 @@ public class Day20 {
         // Split data input and pad
         self.algorithm = Array(String(input[0]))
         var image = [[Character]]()
-        let horizontalPad = Array(repeating: Character("."), count: 25)
-        let verticalPad = Array(repeating: Character("."), count: input[1].count + 50)
+        let padding = 25
+        let horizontalPad = Array(repeating: Character("."), count: padding)
+        let verticalPad = Array(repeating: Character("."), count: input[1].count + (2 * padding))
 
-        for _ in 0..<10 {
+        for _ in 0..<padding {
             image.append(verticalPad)
         }
 
         for i in 1..<input.count {
-            let val = horizontalPad + Array(input[i]) + horizontalPad
-            image.append(val)
+            image.append(horizontalPad + Array(input[i]) + horizontalPad)
         }
 
-        for _ in 0..<10 {
+        for _ in 0..<padding {
             image.append(verticalPad)
         }
 
@@ -50,9 +50,9 @@ public class Day20 {
 
     // Enhance function
     func enhance(x: Int, y: Int) {
-        // Directions (is this backwards?)
-        let dx = [-1, -1, -1, 0, 0, 0, 1, 1, 1]
-        let dy = [-1, 0, 1, -1, 0, 1, -1, 0, 1]
+        // Directions x = cols and y = rows
+        let dx = [-1, 0, 1, -1, 0, 1, -1, 0, 1]
+        let dy = [-1, -1, -1, 0, 0, 0, 1, 1, 1]
         var bin = ""
         
         // Loop through surrounding elements
@@ -60,9 +60,9 @@ public class Day20 {
             let xx = x + dirX
             let yy = y + dirY
             
-            if (xx < 0 || xx == matrix.rows) || (yy < 0 || yy == matrix.cols) {
+            if (xx < 0 || xx == matrix.cols) || (yy < 0 || yy == matrix.rows) {
                 bin.append("0")
-            } else if matrix.mat[xx][yy] == "#" {
+            } else if matrix.mat[yy][xx] == "#" {
                 bin.append("1")
             } else {
                 bin.append("0")
@@ -71,7 +71,7 @@ public class Day20 {
 
         // Lookup algorithm enhance value
         let pos = Int(bin, radix: 2)!
-        matrix.mat2[x][y] = algorithm[pos]
+        matrix.mat2[y][x] = algorithm[pos]
     }
 
     // Part 1
@@ -79,9 +79,9 @@ public class Day20 {
         // Enahnce twice
         for _ in 1...2 {
             // Loop through all elements
-            for i in 0..<matrix.rows {
-                for j in 0..<matrix.cols {
-                    enhance(x: i, y: j)
+            for row in 0..<matrix.rows {
+                for col in 0..<matrix.cols {
+                    enhance(x: col, y: row)
                 }
             }
                 
