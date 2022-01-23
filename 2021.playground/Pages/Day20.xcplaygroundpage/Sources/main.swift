@@ -16,22 +16,28 @@ struct Matrix {
 }
 
 public class Day20 {
-    var matrix: Matrix
+    var input: [Substring]
     var algorithm: [Character]
 
     // Read in data
     public init() {
         // Import data
         let url = Bundle.main.url(forResource: "input", withExtension: "txt")!
-        let input = try! String(contentsOf: url).split(separator: "\n")
+        self.input = try! String(contentsOf: url).split(separator: "\n")
 
         // Split data input and pad
-        self.algorithm = Array(String(input[0]))
+        self.algorithm = Array(String(self.input[0]))
+
+    }
+
+    // Pad surrounding data for inf growth
+    func padData(padding: Int) -> Matrix {
+        // Build padding
         var image = [[Character]]()
-        let padding = 75
         let horizontalPad = Array(repeating: Character("."), count: padding)
         let verticalPad = Array(repeating: Character("."), count: input[1].count + (2 * padding))
 
+        // Pad
         for _ in 0..<padding {
             image.append(verticalPad)
         }
@@ -45,11 +51,11 @@ public class Day20 {
         }
 
         // Configure matrix struct
-        self.matrix = Matrix(matrix: image)
+        return Matrix(matrix: image)
     }
-
+    
     // Enhance function
-    func enhance(x: Int, y: Int, loop: Int) {
+    func enhance(x: Int, y: Int, loop: Int, matrix: inout Matrix) {
         // Directions x = cols and y = rows
         let dx = [-1, 0, 1, -1, 0, 1, -1, 0, 1]
         let dy = [-1, -1, -1, 0, 0, 0, 1, 1, 1]
@@ -79,28 +85,32 @@ public class Day20 {
         matrix.mat2[y][x] = algorithm[pos]
     }
 
-    // Part 1
-    public func part1() {
-        // Enhance twice
-        for i in 1...2 {
-            // Loop through all elements
+    // Simulate
+    func simulate(enhancements: Int, matrix: inout Matrix) -> Int {
+        for i in 1...enhancements {
             for row in 0..<matrix.rows {
                 for col in 0..<matrix.cols {
-                    enhance(x: col, y: row, loop: i)
+                    enhance(x: col, y: row, loop: i, matrix: &matrix)
                 }
             }
 
-            // Update matrix
             matrix.mat = matrix.mat2
         }
 
         // Solution
         let flattened = matrix.mat.flatMap { $0 }
-        print("Part 1: ", flattened.filter{$0 == "#"}.count)
+        return flattened.filter{$0 == "#"}.count
+    }
+    
+    // Part 1
+    public func part1() {
+        var matrix = padData(padding: 2)
+        print("Part 1: ", simulate(enhancements: 2, matrix: &matrix))
     }
 
     // Part 2
     public func part2() {
-        print("Part 2: ", 000)
+        var matrix = padData(padding: 50)
+        print("Part 2: ", simulate(enhancements: 50, matrix: &matrix))
     }
 }
