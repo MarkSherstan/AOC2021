@@ -101,6 +101,9 @@ public class Day21 {
         var tempScore = 0
         
         for (key, value) in master {
+            // Pop value being considered
+            master[key] = nil
+            
             // Get a position and score of interest
             if P1 {
                 tempPos = value[0]
@@ -112,7 +115,7 @@ public class Day21 {
             
             // Go through all dice combinations
             for (rollValue, uniCount) in rollSum2universeCount {
-                // Dont overwrite variables
+                // Dont overwrite master temp variables
                 var localPos = tempPos
                 var localScore = tempScore
                 
@@ -129,45 +132,33 @@ public class Day21 {
                 // Do we have a winner?
                 if localScore > 20 {
                     if P1 {
-                        result[0] += uniCount * value[4]
+                        result[0] += (uniCount * value[4])
                     } else {
-                        result[1] += uniCount * value[4]
+                        result[1] += (uniCount * value[4])
                     }
-                    master.removeValue(forKey: key)
-                    continue
-                }
-                
-                // Build key for dictionary
-                var masterKey = ""
-                if P1 {
-                    masterKey = String(localPos) + "|" + String(localScore) + "|" + String(value[2]) + "|" + String(value[3])
                 } else {
-                    masterKey = String(value[0]) + "|" + String(value[1]) + "|" + String(localPos) + "|" + String(localScore)
-                }
-                
-                // Update dictionary
-                if master[masterKey] == nil {
+                    // Build key for dictionary
+                    var masterKey = ""
                     if P1 {
-                        master[masterKey] = [localPos, localScore, value[2], value[3], uniCount]
+                        masterKey = String(localPos) + "|" + String(localScore) + "|" + String(value[2]) + "|" + String(value[3])
                     } else {
-                        master[masterKey] = [value[0], value[1], localPos, localScore, uniCount]
+                        masterKey = String(value[0]) + "|" + String(value[1]) + "|" + String(localPos) + "|" + String(localScore)
                     }
                     
-                    master.removeValue(forKey: key)
-                } else {
-                    if P1 {
-                        master[masterKey]! = [localPos, localScore, value[2], value[3], uniCount * value[4]]
+                    // Update dictionary
+                    if master[masterKey] == nil {
+                        if P1 {
+                            master[masterKey] = [localPos, localScore, value[2], value[3], uniCount * value[4]]
+                        } else {
+                            master[masterKey] = [value[0], value[1], localPos, localScore, uniCount * value[4]]
+                        }
                     } else {
-                        master[masterKey]! = [value[0], value[1], localPos, localScore, uniCount * value[4]]
+                        master[masterKey]![4] += (uniCount * value[4])
                     }
                 }
             }
-            
-            // Remove value as it has grown into new ones
-//            master.removeValue(forKey: key)
         }
     }
-
     
     // Part 1
     public func part1() {
