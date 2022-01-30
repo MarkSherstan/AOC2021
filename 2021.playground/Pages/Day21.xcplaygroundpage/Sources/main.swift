@@ -41,15 +41,39 @@ struct Player {
 
 // Main logic
 public class Day21 {
+    // Part 1
     var dice: Dice
     var P1: Player
     var P2: Player
+    
+    // Part 2
+    var rollSum2universeCount: [Int: Int] = [:]
+    var master: [String: [Int]] = [:]   // [pos1 score1 pos2 score2 #uni]
+    var result = [0, 0]
 
     // Initial position and dice
     public init() {
+        // Part 1
         self.dice = Dice()
         self.P1 = Player(pos: 1)    // Example: 4
         self.P2 = Player(pos: 2)    // Example: 8
+        
+        // Part 2
+        self.master["4|0|8|0"] = [4, 0, 8, 0, 1]    // Example: self.master["4|0|8|0"] = [4, 0, 8, 0, 1]
+        
+        // Combos for dice (27 possibilities but only 7 outcomes)
+        for i in 1...3 {
+            for j in 1...3 {
+                for k in 1...3 {
+                    let key = i + j + k
+                    if self.rollSum2universeCount[key] == nil {
+                        self.rollSum2universeCount[key] = 1
+                    } else {
+                        self.rollSum2universeCount[key]! += 1
+                    }
+                }
+            }
+        }
     }
     
     // Play function
@@ -71,6 +95,80 @@ public class Day21 {
         }
     }
     
+    // Play function part 2
+    func play2(P1: Bool, master: inout [String: [Int]], result: inout [Int]) {
+        var tempPos = 0
+        var tempScore = 0
+        
+        for (key, value) in master {
+            // Get a position and score of interest
+            if P1 {
+                tempPos = value[0]
+                tempScore = value[1]
+            } else {
+                tempPos = value[2]
+                tempScore = value[3]
+            }
+            
+            // Go through all dice combinations
+            for (rollValue, uniCount) in rollSum2universeCount {
+                // Dont overwrite variables
+                var localPos = tempPos
+                var localScore = tempScore
+                
+                // Move on the board
+                if (localPos + rollValue) % 10 == 0 {
+                    localPos = 10
+                } else {
+                    localPos = (localPos + rollValue) % 10
+                }
+            
+                // Update score
+                localScore += localPos
+                
+                // Do we have a winner?
+                if localScore > 20 {
+                    if P1 {
+                        result[0] += uniCount * value[4]
+                    } else {
+                        result[1] += uniCount * value[4]
+                    }
+                    master.removeValue(forKey: key)
+                    continue
+                }
+                
+                // Build key for dictionary
+                var masterKey = ""
+                if P1 {
+                    masterKey = String(localPos) + "|" + String(localScore) + "|" + String(value[2]) + "|" + String(value[3])
+                } else {
+                    masterKey = String(value[0]) + "|" + String(value[1]) + "|" + String(localPos) + "|" + String(localScore)
+                }
+                
+                // Update dictionary
+                if master[masterKey] == nil {
+                    if P1 {
+                        master[masterKey] = [localPos, localScore, value[2], value[3], uniCount]
+                    } else {
+                        master[masterKey] = [value[0], value[1], localPos, localScore, uniCount]
+                    }
+                    
+                    master.removeValue(forKey: key)
+                } else {
+                    if P1 {
+                        master[masterKey]! = [localPos, localScore, value[2], value[3], uniCount * value[4]]
+                    } else {
+                        master[masterKey]! = [value[0], value[1], localPos, localScore, uniCount * value[4]]
+                    }
+                }
+            }
+            
+            // Remove value as it has grown into new ones
+//            master.removeValue(forKey: key)
+        }
+    }
+
+    
     // Part 1
     public func part1() {
         print("Part 1: ", play())
@@ -78,6 +176,15 @@ public class Day21 {
 
     // Part 2
     public func part2() {
-        print("Part 2: ", 000)
+        // Loop until all games have won
+        while !master.isEmpty {
+            play2(P1: true, master: &master, result: &result)
+            play2(P1: false, master: &master, result: &result)
+            
+            print(result, master.count)
+        }
+
+        // Results
+        print("Part 2: ", result, 444356092776315/result[0], 341960390180808/result[1])
     }
 }
