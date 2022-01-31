@@ -4,7 +4,7 @@ import Foundation
 struct Dice {
     var val = 0
     var rolls = 0
- 
+    
     mutating func roll() -> Int {
         var total = 0
         
@@ -18,7 +18,7 @@ struct Dice {
             self.rolls += 1
             total += self.val
         }
-
+        
         return total
     }
 }
@@ -50,7 +50,7 @@ public class Day21 {
     var rollSum2universeCount: [Int: Int] = [:]
     var master: [String: [Int]] = [:]   // [pos1 score1 pos2 score2 #uni]
     var result = [0, 0]
-
+    
     // Initial position and dice
     public init() {
         // Part 1
@@ -59,7 +59,7 @@ public class Day21 {
         self.P2 = Player(pos: 2)    // Example: 8
         
         // Part 2
-        self.master["4|0|8|0"] = [4, 0, 8, 0, 1]    // Example: self.master["4|0|8|0"] = [4, 0, 8, 0, 1]
+        self.master["1|0|2|0"] = [1, 0, 2, 0, 1]    // Example: self.master["4|0|8|0"] = [4, 0, 8, 0, 1]
         
         // Combos for dice (27 possibilities but only 7 outcomes)
         for i in 1...3 {
@@ -81,7 +81,7 @@ public class Day21 {
         while true {
             let roll1 = dice.roll()
             P1.move(roll: roll1)
- 
+            
             if P1.score >= 1000 {
                 return P2.score * dice.rolls
             }
@@ -99,11 +99,9 @@ public class Day21 {
     func play2(P1: Bool, master: inout [String: [Int]], result: inout [Int]) {
         var tempPos = 0
         var tempScore = 0
+        var masterTemp: [String: [Int]] = [:]
         
-        for (key, value) in master {
-            // Pop value being considered
-            master[key] = nil
-            
+        for (_, value) in master {
             // Get a position and score of interest
             if P1 {
                 tempPos = value[0]
@@ -125,7 +123,7 @@ public class Day21 {
                 } else {
                     localPos = (localPos + rollValue) % 10
                 }
-            
+                
                 // Update score
                 localScore += localPos
                 
@@ -146,36 +144,36 @@ public class Day21 {
                     }
                     
                     // Update dictionary
-                    if master[masterKey] == nil {
+                    if masterTemp[masterKey] == nil {
                         if P1 {
-                            master[masterKey] = [localPos, localScore, value[2], value[3], uniCount * value[4]]
+                            masterTemp[masterKey] = [localPos, localScore, value[2], value[3], uniCount * value[4]]
                         } else {
-                            master[masterKey] = [value[0], value[1], localPos, localScore, uniCount * value[4]]
+                            masterTemp[masterKey] = [value[0], value[1], localPos, localScore, uniCount * value[4]]
                         }
                     } else {
-                        master[masterKey]![4] += (uniCount * value[4])
+                        masterTemp[masterKey]![4] += (uniCount * value[4])
                     }
                 }
             }
         }
+        
+        master = masterTemp
     }
     
     // Part 1
     public func part1() {
         print("Part 1: ", play())
     }
-
+    
     // Part 2
     public func part2() {
         // Loop until all games have won
         while !master.isEmpty {
             play2(P1: true, master: &master, result: &result)
             play2(P1: false, master: &master, result: &result)
-            
-            print(result, master.count)
         }
-
-        // Results
-        print("Part 2: ", result, 444356092776315/result[0], 341960390180808/result[1])
+        
+        // Result
+        print("Part 2: ", result.max()!)
     }
 }
