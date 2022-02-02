@@ -1,11 +1,24 @@
 import Foundation
 
-// Scanner struct
+// Reverse dictionary lookup
+extension Dictionary where Value: Equatable {
+    func key(forValue value: Value) -> Key? {
+        return first { $0.1 == value }?.0
+    }
+}
+
+// Structs
 struct Scanner {
     let ID: Int
     var A: [Int]
     var B: [Int]
     var C: [Int]
+}
+
+struct Transform {
+    let direction: Int
+    let translation: Int
+    let flag: Bool
 }
 
 // Import raw data
@@ -37,6 +50,7 @@ for Entry in raw {
 
 // Find mode of array
 func mode(numbers: [Int]) -> Int {
+    // Create dictionary of the count of each number
     var occurrences: [Int: Int] = [:]
     for number in numbers {
         if occurrences[number] == nil {
@@ -46,13 +60,22 @@ func mode(numbers: [Int]) -> Int {
         }
     }
 
-    return occurrences.values.max()!
+    // Find the max number of occurances
+    let maxVal = occurrences.values.max()!
+    
+    // Return offset
+    if maxVal >= 12 {
+        return occurrences.key(forValue: maxVal)!
+    } else {
+        return 0
+    }
 }
 
 // Function for checking directions
-func directionMachine(littleScanner: [Int], masterScanner: [Int]) -> Int {
+func directionMachine(littleScanner: [Int], masterScanner: [Int]) -> Transform {
     // Variable declaration
     var tempArray = [Int]()
+    var offset = 0
     
     // Check positive case
     for little in littleScanner {
@@ -60,8 +83,9 @@ func directionMachine(littleScanner: [Int], masterScanner: [Int]) -> Int {
     }
     
     // Results and prep for next loop
-    if mode(numbers: tempArray) >= 12 {
-        return 1
+    offset = mode(numbers: tempArray)
+    if offset != 0 {
+        return Transform(direction: -1, translation: offset, flag: true)
     } else {
         tempArray.removeAll()
     }
@@ -72,10 +96,11 @@ func directionMachine(littleScanner: [Int], masterScanner: [Int]) -> Int {
     }
     
     // Results
-    if mode(numbers: tempArray) >= 12 {
-        return -1
+    offset = mode(numbers: tempArray)
+    if offset != 0 {
+        return Transform(direction: 1, translation: offset, flag: true)
     } else {
-        return 0
+        return Transform(direction: 0, translation: 0, flag: false)
     }
 }
 
@@ -87,31 +112,24 @@ let A = scannerArray[1].A
 let B = scannerArray[1].B
 let C = scannerArray[1].C
 
-var arrayA = [Int]()
-var arrayB = [Int]()
-var arrayC = [Int]()
+let transformA = directionMachine(littleScanner: A, masterScanner: masterA)
+let transformB = directionMachine(littleScanner: B, masterScanner: masterB)
+let transformC = directionMachine(littleScanner: C, masterScanner: masterC)
 
-// Still need to switch columns
-for a in A {
-    arrayA.append(contentsOf: masterA.map{$0 + a})
+
+if (transformA.flag && transformB.flag && transformC.flag) {
+    // Add scanner # to master with matching coordinate system
+    scannerArray[0].A.append(contentsOf: A.map{transformA.direction * $0 + transformA.translation})
+    scannerArray[0].B.append(contentsOf: B.map{transformB.direction * $0 + transformB.translation})
+    scannerArray[0].C.append(contentsOf: C.map{transformC.direction * $0 + transformC.translation})
+} else {
+    print("Nope")
+    // Swap around A B C here -> Switch case of all combos? Just have a state. Put all of this in a while loop (and a for loop for the array)
 }
 
-for b in B {
-    arrayB.append(contentsOf: masterB.map{$0 - b})
-}
 
-for c in C {
-    arrayC.append(contentsOf: masterC.map{$0 + c})
-}
-
-print(mode(numbers: arrayA), mode(numbers: arrayB), mode(numbers: arrayC))
-print(directionMachine(littleScanner: A, masterScanner: masterA))
-print(directionMachine(littleScanner: B, masterScanner: masterB))
-print(directionMachine(littleScanner: C, masterScanner: masterC))
 
 // Once we find a match... Need to make a master array for comparison with everything orientated properly
 // First grouping is just +/-
 // Still need to account for swapping
 // Make a function....
-
-//print(scannerArray.count, scannerArray[0].ID, scannerArray[0].A)
