@@ -60,12 +60,13 @@ func mode(numbers: [Int]) -> Int {
         }
     }
 
-    // Find the max number of occurances
-    let maxVal = occurrences.values.max()!
-    
     // Return offset
-    if maxVal >= 12 {
-        return occurrences.key(forValue: maxVal)!
+    if let maxVal = occurrences.values.max() {
+        if maxVal >= 12 {
+            return occurrences.key(forValue: maxVal)!
+        } else {
+            return 0
+        }
     } else {
         return 0
     }
@@ -104,32 +105,78 @@ func directionMachine(littleScanner: [Int], masterScanner: [Int]) -> Transform {
     }
 }
 
-let masterA = scannerArray[0].A
-let masterB = scannerArray[0].B
-let masterC = scannerArray[0].C
+// Ordering function
+func run(scannerArray: inout [Scanner], idx: Int) {
+    // Initial conditions
+    var combo = 0
+    let tempA = scannerArray[idx].A
+    let tempB = scannerArray[idx].B
+    let tempC = scannerArray[idx].C
 
-let A = scannerArray[1].A
-let B = scannerArray[1].B
-let C = scannerArray[1].C
+    while true {
+        // Set up variables
+        var A = [Int]()
+        var B = [Int]()
+        var C = [Int]()
+        
+        // Trial all the different combinations
+        switch combo {
+        case 0:
+            // ABC:ABC
+            A = tempA
+            B = tempB
+            C = tempC
+            combo += 1
+        case 1:
+            // ABC:ACB
+            A = tempA
+            B = tempC
+            C = tempB
+            combo += 1
+        case 2:
+            // ABC:BAC
+            A = tempB
+            B = tempA
+            C = tempC
+            combo += 1
+        case 3:
+            // ABC:BCA
+            A = tempB
+            B = tempC
+            C = tempA
+            combo += 1
+        case 4:
+            // ABC:CAB
+            A = tempC
+            B = tempA
+            C = tempB
+            combo += 1
+        case 5:
+            // ABC:CBA
+            A = tempC
+            B = tempB
+            C = tempA
+            combo += 1
+        default:
+            return
+        }
 
-let transformA = directionMachine(littleScanner: A, masterScanner: masterA)
-let transformB = directionMachine(littleScanner: B, masterScanner: masterB)
-let transformC = directionMachine(littleScanner: C, masterScanner: masterC)
-
-
-if (transformA.flag && transformB.flag && transformC.flag) {
-    // Add scanner # to master with matching coordinate system
-    scannerArray[0].A.append(contentsOf: A.map{transformA.direction * $0 + transformA.translation})
-    scannerArray[0].B.append(contentsOf: B.map{transformB.direction * $0 + transformB.translation})
-    scannerArray[0].C.append(contentsOf: C.map{transformC.direction * $0 + transformC.translation})
-} else {
-    print("Nope")
-    // Swap around A B C here -> Switch case of all combos? Just have a state. Put all of this in a while loop (and a for loop for the array)
+        let transformA = directionMachine(littleScanner: A, masterScanner: scannerArray[0].A)
+        let transformB = directionMachine(littleScanner: B, masterScanner: scannerArray[0].B)
+        let transformC = directionMachine(littleScanner: C, masterScanner: scannerArray[0].C)
+        print(combo-1, "->", transformA.translation, transformB.translation, transformC.translation)
+        
+        if (transformA.flag && transformB.flag && transformC.flag) {
+            // Add scanner # to master with matching coordinate system
+            scannerArray[0].A.append(contentsOf: A.map{transformA.direction * $0 + transformA.translation})
+            scannerArray[0].B.append(contentsOf: B.map{transformB.direction * $0 + transformB.translation})
+            scannerArray[0].C.append(contentsOf: C.map{transformC.direction * $0 + transformC.translation})
+            return
+        }
+    }
 }
 
-
-
-// Once we find a match... Need to make a master array for comparison with everything orientated properly
-// First grouping is just +/-
-// Still need to account for swapping
-// Make a function....
+// Main loop -> Need to turn into while as some results depend on others
+for idx in 1..<scannerArray.count{
+    run(scannerArray: &scannerArray, idx: idx)
+}
