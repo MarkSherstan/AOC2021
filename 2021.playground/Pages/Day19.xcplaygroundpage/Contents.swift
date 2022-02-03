@@ -106,7 +106,7 @@ func directionMachine(littleScanner: [Int], masterScanner: [Int]) -> Transform {
 }
 
 // Ordering function
-func run(scannerArray: inout [Scanner], idx: Int) {
+func run(scannerArray: inout [Scanner], idx: Int) -> Bool {
     // Initial conditions
     var combo = 0
     let tempA = scannerArray[idx].A
@@ -158,25 +158,33 @@ func run(scannerArray: inout [Scanner], idx: Int) {
             C = tempA
             combo += 1
         default:
-            return
+            return false
         }
 
         let transformA = directionMachine(littleScanner: A, masterScanner: scannerArray[0].A)
         let transformB = directionMachine(littleScanner: B, masterScanner: scannerArray[0].B)
         let transformC = directionMachine(littleScanner: C, masterScanner: scannerArray[0].C)
-        print(combo-1, "->", transformA.translation, transformB.translation, transformC.translation)
         
         if (transformA.flag && transformB.flag && transformC.flag) {
             // Add scanner # to master with matching coordinate system
             scannerArray[0].A.append(contentsOf: A.map{transformA.direction * $0 + transformA.translation})
             scannerArray[0].B.append(contentsOf: B.map{transformB.direction * $0 + transformB.translation})
             scannerArray[0].C.append(contentsOf: C.map{transformC.direction * $0 + transformC.translation})
-            return
+            
+            return true
         }
     }
 }
 
-// Main loop -> Need to turn into while as some results depend on others
-for idx in 1..<scannerArray.count{
-    run(scannerArray: &scannerArray, idx: idx)
+// Main logic
+var idxArray = Array(1..<scannerArray.count)
+
+while !idxArray.isEmpty {
+    for idx in idxArray {
+        if run(scannerArray: &scannerArray, idx: idx) {
+            idxArray.removeAll(where: { $0 == idx })
+        }
+    }
 }
+
+print("Part 1:", Set(scannerArray[0].A).count)
