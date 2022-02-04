@@ -24,12 +24,12 @@ struct Transform {
 // Class
 public class Day19 {
     var scannerArray = [Scanner]()
-
+    
     // Read in data
     public init() {
         let url = Bundle.main.url(forResource: "input", withExtension: "txt")!
         let raw = try! String(contentsOf: url).split(separator: "\n", omittingEmptySubsequences: false).split(separator: "")
-
+        
         // Save data to array of structs
         for Entry in raw {
             var ID = -1
@@ -51,11 +51,12 @@ public class Day19 {
             self.scannerArray.append(Scanner(ID: ID, A: A, B: B, C: C))
         }
     }
-
+    
     // Find mode of array
-    func mode(numbers: [Int]) -> Int {
+    func mode(numbers: [Int]) -> [Int] {
         // Create dictionary of the count of each number
         var occurrences: [Int: Int] = [:]
+        
         for number in numbers {
             if occurrences[number] == nil {
                 occurrences[number] = 1
@@ -63,52 +64,93 @@ public class Day19 {
                 occurrences[number]! += 1
             }
         }
-
+        
         // Return offset
-        if let maxVal = occurrences.values.max() {
-            if maxVal >= 12 {
-                return occurrences.key(forValue: maxVal)!
+        if let maxCount = occurrences.values.max() {
+            if maxCount >= 12 {
+                return [occurrences.key(forValue: maxCount)!, maxCount]
             } else {
-                return Int.min
+                return [0, 0]
             }
         } else {
-            return Int.min
+            return [0, 0]
         }
     }
     
     // Function for checking directions
     func directionMachine(littleScanner: [Int], masterScanner: [Int]) -> Transform {
         // Variable declaration
-        var tempArray = [Int]()
-        var offset = Int.min
+        var tempArrayPlus = [Int]()
+        var tempArrayMinus = [Int]()
         
         // Check positive case
         for little in littleScanner {
-            tempArray.append(contentsOf: masterScanner.map{$0 + little})
+            tempArrayPlus.append(contentsOf: masterScanner.map{$0 + little})
         }
-        
-        // Results and prep for next loop
-        offset = mode(numbers: tempArray)
-        if offset != Int.min {
-            return Transform(direction: -1, translation: offset, flag: true)
-        } else {
-            tempArray.removeAll()
-        }
+        let offsetPlus = mode(numbers: tempArrayPlus)
         
         // Check negative case
         for little in littleScanner {
-            tempArray.append(contentsOf: masterScanner.map{$0 - little})
+            tempArrayMinus.append(contentsOf: masterScanner.map{$0 - little})
         }
+        let offsetMinus = mode(numbers: tempArrayMinus)
         
-        // Results
-        offset = mode(numbers: tempArray)
-        if offset != Int.min {
-            return Transform(direction: 1, translation: offset, flag: true)
-        } else {
+        // Comparison
+        if (offsetPlus[1] == 0) && (offsetMinus[1] == 0) {
             return Transform(direction: 0, translation: 0, flag: false)
+        } else {
+            if offsetPlus[1] > offsetMinus[1] {
+                //                print("-", offsetPlus, offsetMinus)
+                return Transform(direction: 1, translation: offsetPlus[0], flag: true)
+            } else {
+                //                print("+", offsetPlus, offsetMinus)
+                return Transform(direction: 1, translation: offsetMinus[0], flag: true)
+            }
         }
     }
-
+    
+    //
+    func createCoords(A: [Int], B: [Int], C: [Int]) -> [[Int]] {
+        var result = [[Int]]()
+        
+        for i in 0..<A.count {
+            result.append([A[i], B[i], C[i]])
+        }
+        
+        return Array(Set(result))
+    }
+    
+    //
+    func test(scannerArray: [Scanner], transformA: Transform, transformB: Transform, transformC: Transform, A: [Int], B: [Int], C: [Int]) -> [Int]{
+        let masterA = scannerArray[0].A
+        let masterB = scannerArray[0].B
+        let masterC = scannerArray[0].C
+        let master = createCoords(A: masterA, B: masterB, C: masterC)
+        
+        let comboA = [1, 1, 1, 1, -1, -1, -1, -1]
+        let comboB = [1, 1, -1, -1, 1, 1, -1, -1]
+        let comboC = [1, -1, 1, -1, 1, -1, 1, -1]
+        
+        var maxCount = -1
+        var maxArray = [0, 0, 0]
+        
+        for i in 0..<comboA.count {
+            let tempA = A.map{comboA[i] * $0 + transformA.translation}
+            let tempB = B.map{comboB[i] * $0 + transformB.translation}
+            let tempC = C.map{comboC[i] * $0 + transformC.translation}
+            
+            let temp = createCoords(A: tempA, B: tempB, C: tempC)
+            let counter = master.filter(temp.contains).count
+            
+            if counter > maxCount {
+                maxCount = counter
+                maxArray = [comboA[i], comboB[i], comboC[i]]
+            }
+        }
+        
+        return maxArray
+    }
+    
     // Ordering function
     func run(scannerArray: inout [Scanner], idx: Int) -> Bool {
         // Initial conditions
@@ -116,7 +158,7 @@ public class Day19 {
         let tempA = scannerArray[idx].A
         let tempB = scannerArray[idx].B
         let tempC = scannerArray[idx].C
-
+        
         while true {
             // Set up variables
             var A = [Int]()
@@ -130,52 +172,50 @@ public class Day19 {
                 A = tempA
                 B = tempB
                 C = tempC
-                combo += 1
             case 1:
                 // ABC:ACB
                 A = tempA
-                B = tempC.map{-1*$0}
-                C = tempB.map{-1*$0}
-                combo += 1
+                B = tempC
+                C = tempB
             case 2:
                 // ABC:BAC
-                A = tempB.map{-1*$0}
-                B = tempA.map{-1*$0}
+                A = tempB
+                B = tempA
                 C = tempC
-                combo += 1
             case 3:
                 // ABC:BCA
-                A = tempB.map{-1*$0}
-                B = tempC.map{-1*$0}
-                C = tempA.map{-1*$0}
-                combo += 1
+                A = tempB
+                B = tempC
+                C = tempA
             case 4:
                 // ABC:CAB
-                A = tempC.map{-1*$0}
-                B = tempA.map{-1*$0}
-                C = tempB.map{-1*$0}
-                combo += 1
+                A = tempC
+                B = tempA
+                C = tempB
             case 5:
                 // ABC:CBA
-                A = tempC.map{-1*$0}
+                A = tempC
                 B = tempB
-                C = tempA.map{-1*$0}
-                combo += 1
+                C = tempA
             default:
                 return false
             }
-
+            
             let transformA = directionMachine(littleScanner: A, masterScanner: scannerArray[0].A)
             let transformB = directionMachine(littleScanner: B, masterScanner: scannerArray[0].B)
             let transformC = directionMachine(littleScanner: C, masterScanner: scannerArray[0].C)
             
             if (transformA.flag && transformB.flag && transformC.flag) {
-                // Add scanner # to master with matching coordinate system
-                scannerArray[0].A.append(contentsOf: A.map{transformA.direction * $0 + transformA.translation})
-                scannerArray[0].B.append(contentsOf: B.map{transformB.direction * $0 + transformB.translation})
-                scannerArray[0].C.append(contentsOf: C.map{transformC.direction * $0 + transformC.translation})
-                print(idx, combo-1, transformA.translation, transformB.translation, transformC.translation)
+                let dir = test(scannerArray: scannerArray, transformA: transformA, transformB: transformB, transformC: transformC, A: A, B: B, C: C)
+                
+                scannerArray[0].A.append(contentsOf: A.map{dir[0] * $0 + transformA.translation})
+                scannerArray[0].B.append(contentsOf: B.map{dir[1] * $0 + transformB.translation})
+                scannerArray[0].C.append(contentsOf: C.map{dir[2] * $0 + transformC.translation})
+                print(idx, combo, transformA.translation, transformB.translation, transformC.translation, dir)
+                
                 return true
+            } else {
+                combo += 1
             }
         }
     }
@@ -183,7 +223,7 @@ public class Day19 {
     // Part 1
     public func part1() {
         var idxArray = Array(1..<scannerArray.count)
-
+        
         while !idxArray.isEmpty {
             for idx in idxArray {
                 if run(scannerArray: &scannerArray, idx: idx) {
@@ -191,22 +231,20 @@ public class Day19 {
                 }
             }
         }
-
+        
         var result = [[Int]]()
         for i in 0..<scannerArray[0].A.count {
-//            print(scannerArray[0].A[i], ",", scannerArray[0].B[i], ",", scannerArray[0].C[i])
             result.append([scannerArray[0].A[i], scannerArray[0].B[i], scannerArray[0].C[i]])
         }
-
-//        let A = Set(result)
-//        for a in A {
-//            print(a[0], ",", a[1], ",", a[2])
-//        }
-//        print("Part 1:", Set(result))
-
+        
+        //        let A = Set(result)
+        //        for a in A {
+        //            print(a[0], ",", a[1], ",", a[2])
+        //        }
+        
         print("Part 1:", Set(result).count, Set(scannerArray[0].A).count, Set(scannerArray[0].B).count, Set(scannerArray[0].C).count)
     }
-
+    
     // Part 2
     public func part2() {
         print("Part 2: ", 000)
