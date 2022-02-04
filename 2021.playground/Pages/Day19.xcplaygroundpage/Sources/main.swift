@@ -69,18 +69,18 @@ public class Day19 {
             if maxVal >= 12 {
                 return occurrences.key(forValue: maxVal)!
             } else {
-                return 0
+                return Int.min
             }
         } else {
-            return 0
+            return Int.min
         }
     }
-
+    
     // Function for checking directions
     func directionMachine(littleScanner: [Int], masterScanner: [Int]) -> Transform {
         // Variable declaration
         var tempArray = [Int]()
-        var offset = 0
+        var offset = Int.min
         
         // Check positive case
         for little in littleScanner {
@@ -89,7 +89,7 @@ public class Day19 {
         
         // Results and prep for next loop
         offset = mode(numbers: tempArray)
-        if offset != 0 {
+        if offset != Int.min {
             return Transform(direction: -1, translation: offset, flag: true)
         } else {
             tempArray.removeAll()
@@ -102,7 +102,7 @@ public class Day19 {
         
         // Results
         offset = mode(numbers: tempArray)
-        if offset != 0 {
+        if offset != Int.min {
             return Transform(direction: 1, translation: offset, flag: true)
         } else {
             return Transform(direction: 0, translation: 0, flag: false)
@@ -134,32 +134,32 @@ public class Day19 {
             case 1:
                 // ABC:ACB
                 A = tempA
-                B = tempC
-                C = tempB
+                B = tempC.map{-1*$0}
+                C = tempB.map{-1*$0}
                 combo += 1
             case 2:
                 // ABC:BAC
-                A = tempB
-                B = tempA
+                A = tempB.map{-1*$0}
+                B = tempA.map{-1*$0}
                 C = tempC
                 combo += 1
             case 3:
                 // ABC:BCA
-                A = tempB
-                B = tempC
-                C = tempA
+                A = tempB.map{-1*$0}
+                B = tempC.map{-1*$0}
+                C = tempA.map{-1*$0}
                 combo += 1
             case 4:
                 // ABC:CAB
-                A = tempC
-                B = tempA
-                C = tempB
+                A = tempC.map{-1*$0}
+                B = tempA.map{-1*$0}
+                C = tempB.map{-1*$0}
                 combo += 1
             case 5:
                 // ABC:CBA
-                A = tempC
+                A = tempC.map{-1*$0}
                 B = tempB
-                C = tempA
+                C = tempA.map{-1*$0}
                 combo += 1
             default:
                 return false
@@ -174,7 +174,7 @@ public class Day19 {
                 scannerArray[0].A.append(contentsOf: A.map{transformA.direction * $0 + transformA.translation})
                 scannerArray[0].B.append(contentsOf: B.map{transformB.direction * $0 + transformB.translation})
                 scannerArray[0].C.append(contentsOf: C.map{transformC.direction * $0 + transformC.translation})
-                
+                print(idx, combo-1, transformA.translation, transformB.translation, transformC.translation)
                 return true
             }
         }
@@ -192,7 +192,19 @@ public class Day19 {
             }
         }
 
-        print("Part 1:", Set(scannerArray[0].A).count)
+        var result = [[Int]]()
+        for i in 0..<scannerArray[0].A.count {
+//            print(scannerArray[0].A[i], ",", scannerArray[0].B[i], ",", scannerArray[0].C[i])
+            result.append([scannerArray[0].A[i], scannerArray[0].B[i], scannerArray[0].C[i]])
+        }
+
+//        let A = Set(result)
+//        for a in A {
+//            print(a[0], ",", a[1], ",", a[2])
+//        }
+//        print("Part 1:", Set(result))
+
+        print("Part 1:", Set(result).count, Set(scannerArray[0].A).count, Set(scannerArray[0].B).count, Set(scannerArray[0].C).count)
     }
 
     // Part 2
