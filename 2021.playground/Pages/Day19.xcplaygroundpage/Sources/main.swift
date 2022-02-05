@@ -89,7 +89,7 @@ public class Day19 {
         }
     }
     
-    // Function for checking directions
+    // Function for checking directions (alpha relative to beta - beta "master")
     func translationMachine(scannerAlpha: [Int], scannerBeta: [Int]) -> [Int] {
         // Variable declaration
         var tempArrayPlus = [Int]()
@@ -122,11 +122,11 @@ public class Day19 {
     }
     
     // Test all the different combos
-    func test(A: [Int], B: [Int], C: [Int]) -> Bool {
+    func test(A: [Int], B: [Int], C: [Int], newIdx: Int) -> Bool {
         // Find the translation
-        let translationA = translationMachine(scannerAlpha: A, scannerBeta: scannerArray[0].A)
-        let translationB = translationMachine(scannerAlpha: B, scannerBeta: scannerArray[0].B)
-        let translationC = translationMachine(scannerAlpha: C, scannerBeta: scannerArray[0].C)
+        let translationA = translationMachine(scannerAlpha: A, scannerBeta: scannerArray[newIdx].A)
+        let translationB = translationMachine(scannerAlpha: B, scannerBeta: scannerArray[newIdx].B)
+        let translationC = translationMachine(scannerAlpha: C, scannerBeta: scannerArray[newIdx].C)
         
         // Translation check all pass
         if (translationA[0] > Int.min) && (translationB[0] > Int.min) && (translationC[0] > Int.min) {
@@ -143,14 +143,13 @@ public class Day19 {
                             let tempB = B.map{comboB[i] * $0 + translationB[k]}
                             let tempC = C.map{comboC[i] * $0 + translationC[l]}
                             let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
-                            let count = scannerArray[0].coords.filter(tempCoords.contains).count
+                            let count = scannerArray[newIdx].coords.filter(tempCoords.contains).count
                             
                             if count >= 12 {
-                                scannerArray[0].A.append(contentsOf: tempA)
-                                scannerArray[0].B.append(contentsOf: tempB)
-                                scannerArray[0].C.append(contentsOf: tempC)
-                                scannerArray[0].coords.formUnion(tempCoords)
-                                // print([translationA[j], translationB[k], translationC[l]])
+                                scannerArray[newIdx].A.append(contentsOf: tempA)
+                                scannerArray[newIdx].B.append(contentsOf: tempB)
+                                scannerArray[newIdx].C.append(contentsOf: tempC)
+                                scannerArray[newIdx].coords.formUnion(tempCoords)
                                 return true
                             }
                         }
@@ -158,12 +157,11 @@ public class Day19 {
                 }
             }
         }
-        
         return false
     }
     
     // Ordering function
-    func run(idx: Int) -> Bool {
+    func run(idx: Int, idxBase: Int) -> Bool {
         // Initial conditions
         var combo = 0
         let tempA = scannerArray[idx].A
@@ -213,7 +211,7 @@ public class Day19 {
             }
             
             // Test combinations to find the transformation
-            if test(A: A, B: B, C: C) {
+            if test(A: A, B: B, C: C, newIdx: idxBase) {
                 return true
             } else {
                 combo += 1
@@ -223,12 +221,19 @@ public class Day19 {
     
     // Part 1
     public func part1() {
-        var idxArray = Array(1..<scannerArray.count)
+        var idxArrayZero = Array(0..<scannerArray.count-1)
+        var idxArrayOne = Array(1..<scannerArray.count)
         
-        while !idxArray.isEmpty {
-            for idx in idxArray {
-                if run(idx: idx) {
-                    idxArray.removeAll(where: { $0 == idx })
+        while (idxArrayZero.count + idxArrayOne.count) != 1 {
+            print("count:", idxArrayZero.count, idxArrayOne.count)
+    topLoop: for idx0 in idxArrayZero {
+                for idx1 in idxArrayOne {
+                    print(idx0, idx1)
+                    if run(idx: idx1, idxBase: idx0) {
+                        idxArrayZero.removeAll(where: { $0 == idx1 })
+                        idxArrayOne.removeAll(where: { $0 == idx1 })
+                        break topLoop
+                    }
                 }
             }
         }
