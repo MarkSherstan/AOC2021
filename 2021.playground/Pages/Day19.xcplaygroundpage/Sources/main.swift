@@ -78,7 +78,7 @@ public class Day19 {
         }
 
         // Return offset
-        if let maxCount = occurrences.values.max() {
+        if let maxCount = occurrences.values.max() {                            // What if there is more than 1?
             if maxCount >= 12 {
                 return [occurrences.key(forValue: maxCount)!, maxCount]
             } else {
@@ -90,34 +90,20 @@ public class Day19 {
     }
     
     // Function for checking directions (alpha relative to beta - beta "master")
-    func translationMachine(scannerAlpha: [Int], scannerBeta: [Int]) -> [Int] {
+    func translationMachine(scannerAlpha: [Int], scannerBeta: [Int]) -> Int {
         // Variable declaration
-        var tempArrayPlus = [Int]()
-        var tempArrayMinus = [Int]()
-        
-        // Check positive case
-        for alpha in scannerAlpha {
-            tempArrayPlus.append(contentsOf: scannerBeta.map{$0 + alpha})
-        }
-        let offsetPlus = mode(numbers: tempArrayPlus)
+        var tempArray = [Int]()
         
         // Check negative case
         for alpha in scannerAlpha {
-            tempArrayMinus.append(contentsOf: scannerBeta.map{$0 - alpha})
+            tempArray.append(contentsOf: scannerBeta.map{$0 - alpha})
         }
-        let offsetMinus = mode(numbers: tempArrayMinus)
+        let offset = mode(numbers: tempArray)
         
-        // Return logic
-        if (offsetPlus[1] > 0) || (offsetMinus[1] > 0) {
-            if offsetPlus[1] > offsetMinus[1] {
-                return [offsetPlus[0], offsetPlus[0]]
-            } else if offsetPlus[1] < offsetMinus[1] {
-                return [offsetMinus[0], offsetMinus[0]]
-            } else {
-                return [offsetPlus[0], offsetMinus[0]]
-            }
+        if offset[1] > Int.min {
+            return offset[0]
         } else {
-            return [Int.min]
+            return Int.min
         }
     }
     
@@ -129,31 +115,26 @@ public class Day19 {
         let translationC = translationMachine(scannerAlpha: C, scannerBeta: scannerArray[newIdx].C)
         
         // Translation check all pass
-        if (translationA[0] > Int.min) && (translationB[0] > Int.min) && (translationC[0] > Int.min) {
+        if (translationA > Int.min) && (translationB > Int.min) && (translationC > Int.min) {
             // Combinations
             let comboA = [1, 1, 1, 1, -1, -1, -1, -1]
             let comboB = [1, 1, -1, -1, 1, 1, -1, -1]
             let comboC = [1, -1, 1, -1, 1, -1, 1, -1]
             
             for i in 0..<comboA.count {
-                for j in 0..<2 {
-                    for k in 0..<2 {
-                        for l in 0..<2 {
-                            let tempA = A.map{comboA[i] * $0 + translationA[j]}
-                            let tempB = B.map{comboB[i] * $0 + translationB[k]}
-                            let tempC = C.map{comboC[i] * $0 + translationC[l]}
-                            let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
-                            let count = scannerArray[newIdx].coords.filter(tempCoords.contains).count
-                            
-                            if count >= 12 {
-                                scannerArray[newIdx].A.append(contentsOf: tempA)
-                                scannerArray[newIdx].B.append(contentsOf: tempB)
-                                scannerArray[newIdx].C.append(contentsOf: tempC)
-                                scannerArray[newIdx].coords.formUnion(tempCoords)
-                                return true
-                            }
-                        }
-                    }
+                let tempA = A.map{comboA[i] * $0 + translationA}
+                let tempB = B.map{comboB[i] * $0 + translationB}
+                let tempC = C.map{comboC[i] * $0 + translationC}
+                let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
+                let count = scannerArray[newIdx].coords.filter(tempCoords.contains).count
+                
+                if count >= 12 {
+                    scannerArray[newIdx].A.append(contentsOf: tempA)
+                    scannerArray[newIdx].B.append(contentsOf: tempB)
+                    scannerArray[newIdx].C.append(contentsOf: tempC)
+                    scannerArray[newIdx].coords.formUnion(tempCoords)
+//                    print(translationA, translationB, translationC)
+                    return true
                 }
             }
         }
@@ -212,6 +193,7 @@ public class Day19 {
             
             // Test combinations to find the transformation
             if test(A: A, B: B, C: C, newIdx: idxBase) {
+                
                 return true
             } else {
                 combo += 1
@@ -221,24 +203,26 @@ public class Day19 {
     
     // Part 1
     public func part1() {
-        var idxArrayZero = Array(0..<scannerArray.count-1)
-        var idxArrayOne = Array(1..<scannerArray.count)
+        var idxArray = Array(0..<scannerArray.count)
         
-        while (idxArrayZero.count + idxArrayOne.count) != 1 {
-            print("count:", idxArrayZero.count, idxArrayOne.count)
-    topLoop: for idx0 in idxArrayZero {
-                for idx1 in idxArrayOne {
-                    print(idx0, idx1)
-                    if run(idx: idx1, idxBase: idx0) {
-                        idxArrayZero.removeAll(where: { $0 == idx1 })
-                        idxArrayOne.removeAll(where: { $0 == idx1 })
-                        break topLoop
+        while idxArray.count != 1 {
+            print("count:", idxArray.count)
+            
+    topLoop: for idx0 in idxArray {
+                for idx1 in idxArray {
+                    if idx0 != idx1 {
+                        print(idx0, idx1)
+                        if run(idx: idx1, idxBase: idx0) {
+                            idxArray.removeAll(where: { $0 == idx1 })
+                            break topLoop
+                        }
                     }
                 }
             }
         }
         
-        print("Part 1:", scannerArray[0].coords.count)
+        let idx = idxArray[0]
+        print("Part 1:", idxArray, scannerArray[idx].coords.count)// scannerArray[0].coords.count)
     }
     
     // Part 2
