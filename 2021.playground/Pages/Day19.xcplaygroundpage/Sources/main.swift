@@ -1,5 +1,12 @@
 import Foundation
 
+// Reverse dictionary lookup
+extension Dictionary where Value: Equatable {
+    func key(forValue value: Value) -> Key? {
+        return first { $0.1 == value }?.0
+    }
+}
+
 // Scanner struct
 struct Scanner {
     let ID: Int
@@ -57,37 +64,97 @@ public class Day19 {
         
         return Set(result)
     }
-            
+    
+    // Find mode of array
+    func mode(numbers: [Int]) -> [Int] {
+        // Create dictionary of the count of each number
+        var occurrences: [Int: Int] = [:]
+        for number in numbers {
+            if occurrences[number] == nil {
+                occurrences[number] = 1
+            } else {
+                occurrences[number]! += 1
+            }
+        }
+
+        // Return offset
+        if let maxCount = occurrences.values.max() {
+            if maxCount >= 12 {
+                return [occurrences.key(forValue: maxCount)!, maxCount]
+            } else {
+                return [Int.min, Int.min]
+            }
+        } else {
+            return [Int.min, Int.min]
+        }
+    }
+    
+    // Function for checking directions
+    func translationMachine(littleScanner: [Int], masterScanner: [Int]) -> Int {
+        // Variable declaration
+        var tempArrayPlus = [Int]()
+        var tempArrayMinus = [Int]()
+        
+        // Check positive case
+        for little in littleScanner {
+            tempArrayPlus.append(contentsOf: masterScanner.map{$0 + little})
+        }
+        let offsetPlus = mode(numbers: tempArrayPlus)
+        
+        // Check negative case
+        for little in littleScanner {
+            tempArrayMinus.append(contentsOf: masterScanner.map{$0 - little})
+        }
+        let offsetMinus = mode(numbers: tempArrayMinus)
+        
+        // Return logic
+        if (offsetPlus[1] > 0) || (offsetMinus[1] > 0) {
+            if offsetPlus[1] > offsetMinus[1] {
+                return offsetPlus[0]
+            } else if offsetPlus[1] < offsetMinus[1] {
+                return offsetMinus[0]
+            } else {
+                print("Tie...")
+                return Int.min
+            }
+        } else {
+            return Int.min
+        }
+    }
+    
     // Test all the different combos
-    func test(coords2check: Set<[Int]>) -> Transform {
-        let masterA = scannerArray[0].A
-        let masterB = scannerArray[0].B
-        let masterC = scannerArray[0].C
-        let master = createCoordSet(A: masterA, B: masterB, C: masterC)
+    func test(A: [Int], B: [Int], C: [Int]) -> Bool {
+        // Find the translation
+        let translationA = translationMachine(littleScanner: A, masterScanner: scannerArray[0].A)
+        let translationB = translationMachine(littleScanner: B, masterScanner: scannerArray[0].B)
+        let translationC = translationMachine(littleScanner: C, masterScanner: scannerArray[0].C)
         
-        let comboA = [1, 1, 1, 1, -1, -1, -1, -1]
-        let comboB = [1, 1, -1, -1, 1, 1, -1, -1]
-        let comboC = [1, -1, 1, -1, 1, -1, 1, -1]
-        
-        var maxCount = -1
-        var maxArray = [0, 0, 0]
-        
-        for i in 0..<comboA.count {
-            print(i)
-//            let tempA = A.map{comboA[i] * $0 + transformA.translation}
-//            let tempB = B.map{comboB[i] * $0 + transformB.translation}
-//            let tempC = C.map{comboC[i] * $0 + transformC.translation}
-//
-//            let temp = createCoordSet(A: tempA, B: tempB, C: tempC)
-//            let counter = master.filter(temp.contains).count
-//
-//            if counter > maxCount {
-//                maxCount = counter
-//                maxArray = [comboA[i], comboB[i], comboC[i]]
-//            }
+        // Translation check all pass
+        if (translationA > Int.min) && (translationB > Int.min) && (translationC > Int.min) {
+            // Combinations
+            let comboA = [1, 1, 1, 1, -1, -1, -1, -1]
+            let comboB = [1, 1, -1, -1, 1, 1, -1, -1]
+            let comboC = [1, -1, 1, -1, 1, -1, 1, -1]
+            
+            for i in 0..<comboA.count {
+                let tempA = A.map{comboA[i] * $0 + translationA}
+                let tempB = B.map{comboB[i] * $0 + translationB}
+                let tempC = C.map{comboC[i] * $0 + translationC}
+                let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
+                let count = scannerArray[0].coords.filter(tempCoords.contains).count
+                
+                if count >= 12 {
+                    scannerArray[0].A.append(contentsOf: tempA)
+                    scannerArray[0].B.append(contentsOf: tempB)
+                    scannerArray[0].C.append(contentsOf: tempC)
+                    scannerArray[0].coords.formUnion(tempCoords)
+                    print([translationA, translationB, translationC])
+                    return true
+                }
+            }
         }
         
-        return Transform(translation:[1,2,3], transformedCoords: Set([[1]]), flag: true)
+        return false
     }
     
     // Ordering function
@@ -140,13 +207,8 @@ public class Day19 {
                 return false
             }
             
-            // Check
-            let tempCoords = createCoordSet(A: A, B: B, C: C)
-            let transform = test(coords2check: tempCoords)
-            
-            // Append
-            if transform.flag {
-                scannerArray[0].coords.formUnion(transform.transformedCoords)
+            // Test combinations to find the transformation
+            if test(A: A, B: B, C: C) {
                 return true
             } else {
                 combo += 1
