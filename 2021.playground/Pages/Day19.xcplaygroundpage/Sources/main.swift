@@ -51,59 +51,46 @@ public class Day19 {
         return Set(result)
     }
     
-    // Create a set of all possible offsets between two data sets
-    func createOffsetSet(A: [Int], B: [Int], C: [Int], newIdx: Int) -> Set<[Int]> {
+    // Test all the different +/- combos
+    func test(A: [Int], B: [Int], C: [Int], newIdx: Int) -> Bool {
         // Combinations
         let comboA = [1, 1, 1, 1, -1, -1, -1, -1]
         let comboB = [1, 1, -1, -1, 1, 1, -1, -1]
         let comboC = [1, -1, 1, -1, 1, -1, 1, -1]
         
-        // Array of possible offsets
-        var offsetSet = Set<[Int]>()
-        
         // Loop through all combinations
         for fixedIdx in 0..<scannerDict[newIdx]!.A.count {
             for floatingIdx in 0..<A.count {
                 for comboIdx in 0..<comboA.count {
-                    // Combos
-                    let offsetA = scannerDict[newIdx]!.A[fixedIdx] + comboA[comboIdx] * A[floatingIdx]
-                    let offsetB = scannerDict[newIdx]!.B[fixedIdx] + comboB[comboIdx] * B[floatingIdx]
-                    let offsetC = scannerDict[newIdx]!.C[fixedIdx] + comboC[comboIdx] * C[floatingIdx]
+                    // Create offset
+                    let offSetA = scannerDict[newIdx]!.A[fixedIdx] - (comboA[comboIdx] * A[floatingIdx])
+                    let offSetB = scannerDict[newIdx]!.B[fixedIdx] - (comboB[comboIdx] * B[floatingIdx])
+                    let offSetC = scannerDict[newIdx]!.C[fixedIdx] - (comboC[comboIdx] * C[floatingIdx])
                     
-                    // Set
-                    offsetSet.insert([offsetA, offsetB, offsetC])
+                    print(offSetA, ",", offSetB, ",", offSetC)
+//                    let offSetA = 68
+//                    let offSetB = -1246
+//                    let offSetC = -43
+                    
+                    // Try an offset
+                    let tempA = A.map{offSetA - comboA[comboIdx] * $0}
+                    let tempB = B.map{offSetB - comboB[comboIdx] * $0}
+                    let tempC = C.map{offSetC - comboC[comboIdx] * $0}
+                    
+                    // Compare new data set to see how much overlap there is
+                    let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
+                    let count = scannerDict[newIdx]!.coords.filter(tempCoords.contains).count
+                    
+                    // If there is enough overlap save results
+                    if count >= 12 {
+                        scannerDict[newIdx]!.A.append(contentsOf: tempA)
+                        scannerDict[newIdx]!.B.append(contentsOf: tempB)
+                        scannerDict[newIdx]!.C.append(contentsOf: tempC)
+                        scannerDict[newIdx]!.coords.formUnion(tempCoords)
+                        print([offSetA, offSetB, offSetC])
+                        return true
+                    }
                 }
-            }
-        }
-        
-        // Solution
-        return offsetSet
-    }
-    
-    // Test all the different +/- combos
-    func test(A: [Int], B: [Int], C: [Int], newIdx: Int) -> Bool {
-//        let offset = createOffsetSet(A: A, B: B, C: C, newIdx: newIdx)
-        let offset = Set([[68, -1246, -43]])
-        
-        for off in offset {
-            // Try an offset
-            let tempA = A.map{$0 - off[0]}
-            let tempB = B.map{$0 - off[1]}
-            let tempC = C.map{$0 - off[2]}
-            
-            // Compare new data set to see how much overlap there is
-            let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
-            let count = scannerDict[newIdx]!.coords.filter(tempCoords.contains).count
-            print(count)
-            
-            // If there is enough overlap save results
-            if count >= 12 {
-                scannerDict[newIdx]!.A.append(contentsOf: tempA)
-                scannerDict[newIdx]!.B.append(contentsOf: tempB)
-                scannerDict[newIdx]!.C.append(contentsOf: tempC)
-                scannerDict[newIdx]!.coords.formUnion(tempCoords)
-                print([off[0], off[1], off[2]])
-                return true
             }
         }
         return false
@@ -165,13 +152,15 @@ public class Day19 {
             } else {
                 combo += 1
             }
+            
+            return false
         }
     }
     
     // Part 1
     public func part1() {
-        run(idx: 1, idxBase: 0)
-        print("Done")
+        print(run(idx: 1, idxBase: 0))
+        
         
 //        // Not sure if the zero case will work...
 //        while scannerDict.count != 1 {
@@ -185,7 +174,7 @@ public class Day19 {
 //                }
 //            }
 //        }
-//
+
 //        print("Part 1:", scannerDict)
     }
         
