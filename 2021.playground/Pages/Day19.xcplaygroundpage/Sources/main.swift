@@ -67,15 +67,10 @@ public class Day19 {
                     let offSetB = scannerDict[newIdx]!.B[fixedIdx] - (comboB[comboIdx] * B[floatingIdx])
                     let offSetC = scannerDict[newIdx]!.C[fixedIdx] - (comboC[comboIdx] * C[floatingIdx])
                     
-                    print(offSetA, ",", offSetB, ",", offSetC)
-//                    let offSetA = 68
-//                    let offSetB = -1246
-//                    let offSetC = -43
-                    
                     // Try an offset
-                    let tempA = A.map{offSetA - comboA[comboIdx] * $0}
-                    let tempB = B.map{offSetB - comboB[comboIdx] * $0}
-                    let tempC = C.map{offSetC - comboC[comboIdx] * $0}
+                    let tempA = A.map{offSetA + comboA[comboIdx] * $0}
+                    let tempB = B.map{offSetB + comboB[comboIdx] * $0}
+                    let tempC = C.map{offSetC + comboC[comboIdx] * $0}
                     
                     // Compare new data set to see how much overlap there is
                     let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
@@ -152,30 +147,23 @@ public class Day19 {
             } else {
                 combo += 1
             }
-            
-            return false
         }
     }
     
     // Part 1
     public func part1() {
-        print(run(idx: 1, idxBase: 0))
-        
-        
-//        // Not sure if the zero case will work...
-//        while scannerDict.count != 1 {
-//            for (idx, _) in scannerDict {
-//                if idx != 0 {
-//                    print(idx)
-//                    if run(idx: idx, idxBase: 0) {
-//                        scannerDict.removeValue(forKey: idx)
-//                        break
-//                    }
-//                }
-//            }
-//        }
-
-//        print("Part 1:", scannerDict)
+        // Not sure if the zero case will work...
+        while scannerDict.count != 1 {
+            for (idx, _) in scannerDict {
+                if idx != 0 {
+                    if run(idx: idx, idxBase: 0) {
+                        scannerDict.removeValue(forKey: idx)
+                        break
+                    }
+                }
+            }
+        }
+        print("Part 1:", scannerDict[0]!.coords.count)
     }
         
     // Part 2
