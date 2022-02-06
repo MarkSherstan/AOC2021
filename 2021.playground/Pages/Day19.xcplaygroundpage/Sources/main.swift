@@ -9,7 +9,6 @@ extension Dictionary where Value: Equatable {
 
 // Scanner struct
 struct Scanner {
-    let ID: Int
     var A: [Int]
     var B: [Int]
     var C: [Int]
@@ -24,7 +23,7 @@ struct Transform {
 
 // Class
 public class Day19 {
-    var scannerArray = [Scanner]()
+    var scannerDict: [Int: Scanner] = [:]
     
     // Read in data
     public init() {
@@ -50,7 +49,7 @@ public class Day19 {
             }
             
             let coords = createCoordSet(A: A, B: B, C: C)
-            self.scannerArray.append(Scanner(ID: ID, A: A, B: B, C: C, coords: coords))
+            self.scannerDict[ID] = Scanner(A: A, B: B, C: C, coords: coords)
         }
     }
     
@@ -78,7 +77,7 @@ public class Day19 {
         }
 
         // Return offset
-        if let maxCount = occurrences.values.max() {                            // What if there is more than 1?
+        if let maxCount = occurrences.values.max() {                                // What if there is more than 1?
             if maxCount >= 12 {
                 return [occurrences.key(forValue: maxCount)!, maxCount]
             } else {
@@ -110,9 +109,9 @@ public class Day19 {
     // Test all the different combos
     func test(A: [Int], B: [Int], C: [Int], newIdx: Int) -> Bool {
         // Find the translation
-        let translationA = translationMachine(scannerAlpha: A, scannerBeta: scannerArray[newIdx].A)
-        let translationB = translationMachine(scannerAlpha: B, scannerBeta: scannerArray[newIdx].B)
-        let translationC = translationMachine(scannerAlpha: C, scannerBeta: scannerArray[newIdx].C)
+        let translationA = translationMachine(scannerAlpha: A, scannerBeta: scannerDict[newIdx]!.A)
+        let translationB = translationMachine(scannerAlpha: B, scannerBeta: scannerDict[newIdx]!.B)
+        let translationC = translationMachine(scannerAlpha: C, scannerBeta: scannerDict[newIdx]!.C)
         
         // Translation check all pass
         if (translationA > Int.min) && (translationB > Int.min) && (translationC > Int.min) {
@@ -122,17 +121,22 @@ public class Day19 {
             let comboC = [1, -1, 1, -1, 1, -1, 1, -1]
             
             for i in 0..<comboA.count {
+                // loop through Array A, difference from everything in B
+                // If count is greater than 12 we have a match
+                // use above - and +
+                // Should the zero case work -> everything relative too..
+                
                 let tempA = A.map{comboA[i] * $0 + translationA}
                 let tempB = B.map{comboB[i] * $0 + translationB}
                 let tempC = C.map{comboC[i] * $0 + translationC}
                 let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
-                let count = scannerArray[newIdx].coords.filter(tempCoords.contains).count
+                let count = scannerDict[newIdx]!.coords.filter(tempCoords.contains).count
                 
                 if count >= 12 {
-                    scannerArray[newIdx].A.append(contentsOf: tempA)
-                    scannerArray[newIdx].B.append(contentsOf: tempB)
-                    scannerArray[newIdx].C.append(contentsOf: tempC)
-                    scannerArray[newIdx].coords.formUnion(tempCoords)
+                    scannerDict[newIdx]!.A.append(contentsOf: tempA)
+                    scannerDict[newIdx]!.B.append(contentsOf: tempB)
+                    scannerDict[newIdx]!.C.append(contentsOf: tempC)
+                    scannerDict[newIdx]!.coords.formUnion(tempCoords)
 //                    print(translationA, translationB, translationC)
                     return true
                 }
@@ -145,9 +149,9 @@ public class Day19 {
     func run(idx: Int, idxBase: Int) -> Bool {
         // Initial conditions
         var combo = 0
-        let tempA = scannerArray[idx].A
-        let tempB = scannerArray[idx].B
-        let tempC = scannerArray[idx].C
+        let tempA = scannerDict[idx]!.A
+        let tempB = scannerDict[idx]!.B
+        let tempC = scannerDict[idx]!.C
         
         while true {
             // Set up variables
@@ -193,7 +197,7 @@ public class Day19 {
             
             // Test combinations to find the transformation
             if test(A: A, B: B, C: C, newIdx: idxBase) {
-                
+                scannerDict.removeValue(forKey: idx)
                 return true
             } else {
                 combo += 1
@@ -203,17 +207,14 @@ public class Day19 {
     
     // Part 1
     public func part1() {
-        var idxArray = Array(0..<scannerArray.count)
         
-        while idxArray.count != 1 {
-            print("count:", idxArray.count)
-            
-    topLoop: for idx0 in idxArray {
-                for idx1 in idxArray {
-                    if idx0 != idx1 {
-                        print(idx0, idx1)
-                        if run(idx: idx1, idxBase: idx0) {
-                            idxArray.removeAll(where: { $0 == idx1 })
+        while scannerDict.count != 1 {
+    topLoop: for (idx1, _) in scannerDict {
+                for (idx2, _) in scannerDict {
+                    
+                    if idx1 != idx2 {
+                        print(idx1, idx2)
+                        if run(idx: idx2, idxBase: idx1) {
                             break topLoop
                         }
                     }
@@ -221,8 +222,7 @@ public class Day19 {
             }
         }
         
-        let idx = idxArray[0]
-        print("Part 1:", idxArray, scannerArray[idx].coords.count)// scannerArray[0].coords.count)
+        print("Part 1:", scannerDict)// scannerArray[0].coords.count)
     }
     
     // Part 2
