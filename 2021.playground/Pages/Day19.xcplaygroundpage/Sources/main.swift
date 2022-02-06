@@ -1,24 +1,11 @@
 import Foundation
 
-// Reverse dictionary lookup
-extension Dictionary where Value: Equatable {
-    func key(forValue value: Value) -> Key? {
-        return first { $0.1 == value }?.0
-    }
-}
-
 // Scanner struct
 struct Scanner {
     var A: [Int]
     var B: [Int]
     var C: [Int]
     var coords: Set<[Int]>
-}
-
-struct Transform {
-    var translation: [Int]
-    var transformedCoords: Set<[Int]>
-    var flag: Bool
 }
 
 // Class
@@ -30,7 +17,7 @@ public class Day19 {
         let url = Bundle.main.url(forResource: "input", withExtension: "txt")!
         let raw = try! String(contentsOf: url).split(separator: "\n", omittingEmptySubsequences: false).split(separator: "")
         
-        // Save data to array of structs
+        // Save data to dictionary of structs
         for Entry in raw {
             var ID = -1
             var A = [Int]()
@@ -64,82 +51,59 @@ public class Day19 {
         return Set(result)
     }
     
-    // Find mode of array
-    func mode(numbers: [Int]) -> [Int] {
-        // Create dictionary of the count of each number
-        var occurrences: [Int: Int] = [:]
-        for number in numbers {
-            if occurrences[number] == nil {
-                occurrences[number] = 1
-            } else {
-                occurrences[number]! += 1
-            }
-        }
-
-        // Return offset
-        if let maxCount = occurrences.values.max() {                                // What if there is more than 1?
-            if maxCount >= 12 {
-                return [occurrences.key(forValue: maxCount)!, maxCount]
-            } else {
-                return [Int.min, Int.min]
-            }
-        } else {
-            return [Int.min, Int.min]
-        }
-    }
-    
-    // Function for checking directions (alpha relative to beta - beta "master")
-    func translationMachine(scannerAlpha: [Int], scannerBeta: [Int]) -> Int {
-        // Variable declaration
-        var tempArray = [Int]()
+    // Create a set of all possible offsets between two data sets
+    func createOffsetSet(A: [Int], B: [Int], C: [Int], newIdx: Int) -> Set<[Int]> {
+        // Combinations
+        let comboA = [1, 1, 1, 1, -1, -1, -1, -1]
+        let comboB = [1, 1, -1, -1, 1, 1, -1, -1]
+        let comboC = [1, -1, 1, -1, 1, -1, 1, -1]
         
-        // Check negative case
-        for alpha in scannerAlpha {
-            tempArray.append(contentsOf: scannerBeta.map{$0 - alpha})
-        }
-        let offset = mode(numbers: tempArray)
+        // Array of possible offsets
+        var offsetSet = Set<[Int]>()
         
-        if offset[1] > Int.min {
-            return offset[0]
-        } else {
-            return Int.min
-        }
-    }
-    
-    // Test all the different combos
-    func test(A: [Int], B: [Int], C: [Int], newIdx: Int) -> Bool {
-        // Find the translation
-        let translationA = translationMachine(scannerAlpha: A, scannerBeta: scannerDict[newIdx]!.A)
-        let translationB = translationMachine(scannerAlpha: B, scannerBeta: scannerDict[newIdx]!.B)
-        let translationC = translationMachine(scannerAlpha: C, scannerBeta: scannerDict[newIdx]!.C)
-        
-        // Translation check all pass
-        if (translationA > Int.min) && (translationB > Int.min) && (translationC > Int.min) {
-            // Combinations
-            let comboA = [1, 1, 1, 1, -1, -1, -1, -1]
-            let comboB = [1, 1, -1, -1, 1, 1, -1, -1]
-            let comboC = [1, -1, 1, -1, 1, -1, 1, -1]
-            
-            for i in 0..<comboA.count {
-                // loop through Array A, difference from everything in B
-                // If count is greater than 12 we have a match
-                // use above - and +
-                // Should the zero case work -> everything relative too..
-                
-                let tempA = A.map{comboA[i] * $0 + translationA}
-                let tempB = B.map{comboB[i] * $0 + translationB}
-                let tempC = C.map{comboC[i] * $0 + translationC}
-                let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
-                let count = scannerDict[newIdx]!.coords.filter(tempCoords.contains).count
-                
-                if count >= 12 {
-                    scannerDict[newIdx]!.A.append(contentsOf: tempA)
-                    scannerDict[newIdx]!.B.append(contentsOf: tempB)
-                    scannerDict[newIdx]!.C.append(contentsOf: tempC)
-                    scannerDict[newIdx]!.coords.formUnion(tempCoords)
-//                    print(translationA, translationB, translationC)
-                    return true
+        // Loop through all combinations
+        for fixedIdx in 0..<scannerDict[newIdx]!.A.count {
+            for floatingIdx in 0..<A.count {
+                for comboIdx in 0..<comboA.count {
+                    // Combos
+                    let offsetA = scannerDict[newIdx]!.A[fixedIdx] + comboA[comboIdx] * A[floatingIdx]
+                    let offsetB = scannerDict[newIdx]!.B[fixedIdx] + comboB[comboIdx] * B[floatingIdx]
+                    let offsetC = scannerDict[newIdx]!.C[fixedIdx] + comboC[comboIdx] * C[floatingIdx]
+                    
+                    // Set
+                    offsetSet.insert([offsetA, offsetB, offsetC])
                 }
+            }
+        }
+        
+        // Solution
+        return offsetSet
+    }
+    
+    // Test all the different +/- combos
+    func test(A: [Int], B: [Int], C: [Int], newIdx: Int) -> Bool {
+//        let offset = createOffsetSet(A: A, B: B, C: C, newIdx: newIdx)
+        let offset = Set([[68, -1246, -43]])
+        
+        for off in offset {
+            // Try an offset
+            let tempA = A.map{$0 - off[0]}
+            let tempB = B.map{$0 - off[1]}
+            let tempC = C.map{$0 - off[2]}
+            
+            // Compare new data set to see how much overlap there is
+            let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
+            let count = scannerDict[newIdx]!.coords.filter(tempCoords.contains).count
+            print(count)
+            
+            // If there is enough overlap save results
+            if count >= 12 {
+                scannerDict[newIdx]!.A.append(contentsOf: tempA)
+                scannerDict[newIdx]!.B.append(contentsOf: tempB)
+                scannerDict[newIdx]!.C.append(contentsOf: tempC)
+                scannerDict[newIdx]!.coords.formUnion(tempCoords)
+                print([off[0], off[1], off[2]])
+                return true
             }
         }
         return false
@@ -197,7 +161,6 @@ public class Day19 {
             
             // Test combinations to find the transformation
             if test(A: A, B: B, C: C, newIdx: idxBase) {
-                scannerDict.removeValue(forKey: idx)
                 return true
             } else {
                 combo += 1
@@ -207,24 +170,25 @@ public class Day19 {
     
     // Part 1
     public func part1() {
+        run(idx: 1, idxBase: 0)
+        print("Done")
         
-        while scannerDict.count != 1 {
-    topLoop: for (idx1, _) in scannerDict {
-                for (idx2, _) in scannerDict {
-                    
-                    if idx1 != idx2 {
-                        print(idx1, idx2)
-                        if run(idx: idx2, idxBase: idx1) {
-                            break topLoop
-                        }
-                    }
-                }
-            }
-        }
-        
-        print("Part 1:", scannerDict)// scannerArray[0].coords.count)
+//        // Not sure if the zero case will work...
+//        while scannerDict.count != 1 {
+//            for (idx, _) in scannerDict {
+//                if idx != 0 {
+//                    print(idx)
+//                    if run(idx: idx, idxBase: 0) {
+//                        scannerDict.removeValue(forKey: idx)
+//                        break
+//                    }
+//                }
+//            }
+//        }
+//
+//        print("Part 1:", scannerDict)
     }
-    
+        
     // Part 2
     public func part2() {
         print("Part 2: ", 000)
