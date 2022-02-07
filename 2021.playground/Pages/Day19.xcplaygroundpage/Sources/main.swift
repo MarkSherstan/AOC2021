@@ -154,8 +154,10 @@ public class Day19 {
     public func part1() {
         // Not sure if the zero case will work...
         while scannerDict.count != 1 {
+            print(scannerDict.count)
             for (idx, _) in scannerDict {
                 if idx != 0 {
+                    print(idx)
                     if run(idx: idx, idxBase: 0) {
                         scannerDict.removeValue(forKey: idx)
                         break
