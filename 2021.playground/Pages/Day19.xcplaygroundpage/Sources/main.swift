@@ -155,7 +155,7 @@ public class Day19 {
     public func part1() {
         // Run until everything is brought into 0 frame
         while scannerDict.count != 1 {
-            print(scannerDict.count)
+            print("Scanners remaining: ", scannerDict.count)
             for (idx, _) in scannerDict {
                 if idx != 0 {
                     if run(idx: idx) {
@@ -170,6 +170,15 @@ public class Day19 {
         
     // Part 2
     public func part2() {
-        print("Part 2: ", 000)
+        var maxManhattan = [Int]()
+        
+        for alpha in scannerCoords {
+            for beta in scannerCoords {
+                maxManhattan.append(abs(alpha[0] - beta[0]) + abs(alpha[1] - beta[1]) + abs(alpha[2] - beta[2]))
+                maxManhattan.append(abs(beta[0] - alpha[0]) + abs(beta[1] - alpha[1]) + abs(beta[2] - alpha[2]))
+            }
+        }
+        
+        print("Part 2: ", maxManhattan.max()!)
     }
 }
