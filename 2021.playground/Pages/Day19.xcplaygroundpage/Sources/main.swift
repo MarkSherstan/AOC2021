@@ -11,6 +11,7 @@ struct Scanner {
 // Class
 public class Day19 {
     var scannerDict: [Int: Scanner] = [:]
+    var scannerCoords = [[0, 0, 0]]
     
     // Read in data
     public init() {
@@ -52,20 +53,20 @@ public class Day19 {
     }
     
     // Test all the different +/- combos
-    func test(A: [Int], B: [Int], C: [Int], newIdx: Int) -> Bool {
+    func test(A: [Int], B: [Int], C: [Int]) -> Bool {
         // Combinations
         let comboA = [1, 1, 1, 1, -1, -1, -1, -1]
         let comboB = [1, 1, -1, -1, 1, 1, -1, -1]
         let comboC = [1, -1, 1, -1, 1, -1, 1, -1]
         
         // Loop through all combinations
-        for fixedIdx in 0..<scannerDict[newIdx]!.A.count {
+        for fixedIdx in 0..<scannerDict[0]!.A.count {
             for floatingIdx in 0..<A.count {
                 for comboIdx in 0..<comboA.count {
                     // Create offset
-                    let offSetA = scannerDict[newIdx]!.A[fixedIdx] - (comboA[comboIdx] * A[floatingIdx])
-                    let offSetB = scannerDict[newIdx]!.B[fixedIdx] - (comboB[comboIdx] * B[floatingIdx])
-                    let offSetC = scannerDict[newIdx]!.C[fixedIdx] - (comboC[comboIdx] * C[floatingIdx])
+                    let offSetA = scannerDict[0]!.A[fixedIdx] - (comboA[comboIdx] * A[floatingIdx])
+                    let offSetB = scannerDict[0]!.B[fixedIdx] - (comboB[comboIdx] * B[floatingIdx])
+                    let offSetC = scannerDict[0]!.C[fixedIdx] - (comboC[comboIdx] * C[floatingIdx])
                     
                     // Try an offset
                     let tempA = A.map{offSetA + comboA[comboIdx] * $0}
@@ -74,15 +75,15 @@ public class Day19 {
                     
                     // Compare new data set to see how much overlap there is
                     let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
-                    let count = scannerDict[newIdx]!.coords.filter(tempCoords.contains).count
+                    let count = scannerDict[0]!.coords.filter(tempCoords.contains).count
                     
                     // If there is enough overlap save results
                     if count >= 12 {
-                        scannerDict[newIdx]!.A.append(contentsOf: tempA)
-                        scannerDict[newIdx]!.B.append(contentsOf: tempB)
-                        scannerDict[newIdx]!.C.append(contentsOf: tempC)
-                        scannerDict[newIdx]!.coords.formUnion(tempCoords)
-                        print([offSetA, offSetB, offSetC])
+                        scannerDict[0]!.A.append(contentsOf: tempA)
+                        scannerDict[0]!.B.append(contentsOf: tempB)
+                        scannerDict[0]!.C.append(contentsOf: tempC)
+                        scannerDict[0]!.coords.formUnion(tempCoords)
+                        scannerCoords.append([offSetA, offSetB, offSetC])
                         return true
                     }
                 }
@@ -92,7 +93,7 @@ public class Day19 {
     }
     
     // Ordering function
-    func run(idx: Int, idxBase: Int) -> Bool {
+    func run(idx: Int) -> Bool {
         // Initial conditions
         var combo = 0
         let tempA = scannerDict[idx]!.A
@@ -142,7 +143,7 @@ public class Day19 {
             }
             
             // Test combinations to find the transformation
-            if test(A: A, B: B, C: C, newIdx: idxBase) {
+            if test(A: A, B: B, C: C) {
                 return true
             } else {
                 combo += 1
@@ -152,13 +153,12 @@ public class Day19 {
     
     // Part 1
     public func part1() {
-        // Not sure if the zero case will work...
+        // Run until everything is brought into 0 frame
         while scannerDict.count != 1 {
             print(scannerDict.count)
             for (idx, _) in scannerDict {
                 if idx != 0 {
-                    print(idx)
-                    if run(idx: idx, idxBase: 0) {
+                    if run(idx: idx) {
                         scannerDict.removeValue(forKey: idx)
                         break
                     }
