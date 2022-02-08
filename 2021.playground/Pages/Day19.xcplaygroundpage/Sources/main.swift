@@ -52,9 +52,10 @@ public class Day19 {
         return Set(result)
     }
     
-    // Test all the different +/- combos
-    func test(A: [Int], B: [Int], C: [Int]) -> Bool {
-        // Combinations
+    // Generate all offsets and filter them
+    func generateOffsets(A: [Int], B: [Int], C: [Int]) -> [[Int]: [[Int]]] {
+        // Inital variables
+        var offSetDict: [[Int]: [[Int]]] = [:]
         let comboA = [1, 1, 1, 1, -1, -1, -1, -1]
         let comboB = [1, 1, -1, -1, 1, 1, -1, -1]
         let comboC = [1, -1, 1, -1, 1, -1, 1, -1]
@@ -67,25 +68,47 @@ public class Day19 {
                     let offSetA = scannerDict[0]!.A[fixedIdx] - (comboA[comboIdx] * A[floatingIdx])
                     let offSetB = scannerDict[0]!.B[fixedIdx] - (comboB[comboIdx] * B[floatingIdx])
                     let offSetC = scannerDict[0]!.C[fixedIdx] - (comboC[comboIdx] * C[floatingIdx])
+                    let offSet = [offSetA, offSetB, offSetC]
                     
-                    // Try an offset
-                    let tempA = A.map{offSetA + comboA[comboIdx] * $0}
-                    let tempB = B.map{offSetB + comboB[comboIdx] * $0}
-                    let tempC = C.map{offSetC + comboC[comboIdx] * $0}
-                    
-                    // Compare new data set to see how much overlap there is
-                    let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
-                    let count = scannerDict[0]!.coords.filter(tempCoords.contains).count
-                    
-                    // If there is enough overlap save results
-                    if count >= 12 {
-                        scannerDict[0]!.A.append(contentsOf: tempA)
-                        scannerDict[0]!.B.append(contentsOf: tempB)
-                        scannerDict[0]!.C.append(contentsOf: tempC)
-                        scannerDict[0]!.coords.formUnion(tempCoords)
-                        scannerCoords.append([offSetA, offSetB, offSetC])
-                        return true
+                    // Save data
+                    if offSetDict[offSet] == nil {
+                        offSetDict[offSet] = [[comboA[comboIdx], comboB[comboIdx], comboC[comboIdx]]]
+                    } else {
+                        offSetDict[offSet]!.append([comboA[comboIdx], comboB[comboIdx], comboC[comboIdx]])
                     }
+                }
+            }
+        }
+        
+        // We should see at least 12 points overlap but will need to confirm they are the correct ones later
+        return offSetDict.filter { $1.count >= 12 }
+    }
+    
+    // Test all the different +/- combos
+    func test(A: [Int], B: [Int], C: [Int]) -> Bool {
+        // Create all the combinations
+        let offSetDict = generateOffsets(A: A, B: B, C: C)
+        
+        // Loop through all the filtered combinations
+        for (offSet, signArray) in offSetDict {
+            for sign in signArray {
+                // Try an offset
+                let tempA = A.map{offSet[0] + sign[0] * $0}
+                let tempB = B.map{offSet[1] + sign[1] * $0}
+                let tempC = C.map{offSet[2] + sign[2] * $0}
+                
+                // Compare new data set to see how much overlap there is
+                let tempCoords = createCoordSet(A: tempA, B: tempB, C: tempC)
+                let count = scannerDict[0]!.coords.filter(tempCoords.contains).count
+                
+                // If there is enough overlap save results
+                if count >= 12 {
+                    scannerDict[0]!.A.append(contentsOf: tempA)
+                    scannerDict[0]!.B.append(contentsOf: tempB)
+                    scannerDict[0]!.C.append(contentsOf: tempC)
+                    scannerDict[0]!.coords.formUnion(tempCoords)
+                    scannerCoords.append([offSet[0], offSet[1], offSet[2]])
+                    return true
                 }
             }
         }
