@@ -61,13 +61,13 @@ public class Day19 {
         let comboC = [1, -1, 1, -1, 1, -1, 1, -1]
         
         // Loop through all combinations
-        for fixedIdx in 0..<scannerDict[0]!.A.count {
+        for fixedCoord in scannerDict[0]!.coords {
             for floatingIdx in 0..<A.count {
                 for comboIdx in 0..<comboA.count {
                     // Create offset
-                    let offSetA = scannerDict[0]!.A[fixedIdx] - (comboA[comboIdx] * A[floatingIdx])
-                    let offSetB = scannerDict[0]!.B[fixedIdx] - (comboB[comboIdx] * B[floatingIdx])
-                    let offSetC = scannerDict[0]!.C[fixedIdx] - (comboC[comboIdx] * C[floatingIdx])
+                    let offSetA = fixedCoord[0] - (comboA[comboIdx] * A[floatingIdx])
+                    let offSetB = fixedCoord[1] - (comboB[comboIdx] * B[floatingIdx])
+                    let offSetC = fixedCoord[2] - (comboC[comboIdx] * C[floatingIdx])
                     let offSet = [offSetA, offSetB, offSetC]
                     
                     // Save data
@@ -91,7 +91,7 @@ public class Day19 {
         
         // Loop through all the filtered combinations
         for (offSet, signArray) in offSetDict {
-            for sign in signArray {
+            for sign in Set(signArray) {
                 // Try an offset
                 let tempA = A.map{offSet[0] + sign[0] * $0}
                 let tempB = B.map{offSet[1] + sign[1] * $0}
@@ -103,9 +103,6 @@ public class Day19 {
                 
                 // If there is enough overlap save results
                 if count >= 12 {
-                    scannerDict[0]!.A.append(contentsOf: tempA)
-                    scannerDict[0]!.B.append(contentsOf: tempB)
-                    scannerDict[0]!.C.append(contentsOf: tempC)
                     scannerDict[0]!.coords.formUnion(tempCoords)
                     scannerCoords.append([offSet[0], offSet[1], offSet[2]])
                     return true
@@ -201,7 +198,6 @@ public class Day19 {
                 maxManhattan.append(abs(beta[0] - alpha[0]) + abs(beta[1] - alpha[1]) + abs(beta[2] - alpha[2]))
             }
         }
-        
         print("Part 2: ", maxManhattan.max()!)
     }
 }
