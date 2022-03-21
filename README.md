@@ -3,10 +3,10 @@ Advent of Code (Swift) 2021
 
 # Solve Times
 ## Hardware
-13" "MacBook Pro (Late 2013)
-2.8 GHz Dual-Core Intel Core i7-4558U
-16 GB 1600 MHz DDR3
-macOS Big Sur - Xcode 13
+* 13" "MacBook Pro (Late 2013)
+* 2.8 GHz Dual-Core Intel Core i7-4558U
+* 16 GB 1600 MHz DDR3
+* macOS Big Sur - Xcode 13
 
 ## Times (seconds)
 * Day 1:  0.104
@@ -19,7 +19,7 @@ macOS Big Sur - Xcode 13
 * Day 8:  0.187
 * Day 9:  0.971
 * Day 10: 0.081
-* Day 11:         Update!
+* Day 11: 0.250
 * Day 12: 1.198
 * Day 13: 7.279
 * Day 14: 0.072
