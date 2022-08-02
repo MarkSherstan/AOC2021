@@ -11,6 +11,8 @@
 		1D2C9CD32898559A008D6C5E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2C9CD22898559A008D6C5E /* ContentView.swift */; };
 		1D2C9CD52898559D008D6C5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D2C9CD42898559D008D6C5E /* Assets.xcassets */; };
 		1D2C9CD82898559D008D6C5E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D2C9CD72898559D008D6C5E /* Preview Assets.xcassets */; };
+		1D2C9CE328985713008D6C5E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 1D2C9CE228985713008D6C5E /* Algorithms */; };
+		1DDAA1252898584D008573D1 /* Part1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA1242898584D008573D1 /* Part1.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,7 @@
 		1D2C9CD42898559D008D6C5E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1D2C9CD72898559D008D6C5E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1D2C9CD92898559D008D6C5E /* Day22.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Day22.entitlements; sourceTree = "<group>"; };
+		1DDAA1242898584D008573D1 /* Part1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Part1.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +30,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D2C9CE328985713008D6C5E /* Algorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +58,7 @@
 			children = (
 				1D2C9CD02898559A008D6C5E /* Day22App.swift */,
 				1D2C9CD22898559A008D6C5E /* ContentView.swift */,
+				1DDAA1242898584D008573D1 /* Part1.swift */,
 				1D2C9CD42898559D008D6C5E /* Assets.xcassets */,
 				1D2C9CD92898559D008D6C5E /* Day22.entitlements */,
 				1D2C9CD62898559D008D6C5E /* Preview Content */,
@@ -85,6 +90,9 @@
 			dependencies = (
 			);
 			name = Day22;
+			packageProductDependencies = (
+				1D2C9CE228985713008D6C5E /* Algorithms */,
+			);
 			productName = Day22;
 			productReference = 1D2C9CCD2898559A008D6C5E /* Day22.app */;
 			productType = "com.apple.product-type.application";
@@ -113,6 +121,9 @@
 				Base,
 			);
 			mainGroup = 1D2C9CC42898559A008D6C5E;
+			packageReferences = (
+				1D2C9CE128985713008D6C5E /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+			);
 			productRefGroup = 1D2C9CCE2898559A008D6C5E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -139,6 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DDAA1252898584D008573D1 /* Part1.swift in Sources */,
 				1D2C9CD32898559A008D6C5E /* ContentView.swift in Sources */,
 				1D2C9CD12898559A008D6C5E /* Day22App.swift in Sources */,
 			);
@@ -338,6 +350,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1D2C9CE128985713008D6C5E /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1D2C9CE228985713008D6C5E /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1D2C9CE128985713008D6C5E /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1D2C9CC52898559A008D6C5E /* Project object */;
 }
