@@ -8,49 +8,69 @@
 import SwiftUI
 
 struct ContentView: View {
-    var p1 = Part1()
-    @State var test1Result: String = "Part 1: "
-    @State var test2Result: String = "Part 2: "
-    @State var timeResult: String = "Time Elapsed: "
+    var d22 = Day22()
+    @State var test1Result: String = ""
+    @State var test2Result: String = ""
+    @State var part1Result: String = ""
+    @State var part2Result: String = ""
+    @State var timeResult: String = "Time Elapsed [s]: "
     
     var body: some View {
-        
-        VStack(spacing: 50) {
+        VStack(spacing: 40) {
             HStack(spacing: 50) {
                 VStack(spacing: 20) {
-                    Button(action: {
-                        let result = self.p1.updateTest1()
-                        test1Result = "Part 1: " + String(result.sol)
-                        timeResult = "Time Elapsed: " + String(result.time)
-                    }) {
-                        Text("P1 Test")
+                    VStack(spacing: 20) {
+                        Button(action: {
+                            let result = self.d22.updateTest1()
+                            test1Result = String(result.sol)
+                            timeResult = "Time Elapsed [s]: " + String(format: "%.3f", result.time)
+                        }) {
+                            Text("Test 1")
+                        }
+                        
+                        Text(test1Result)
                     }
                     
-                    Button(action: {
-                    }) {
-                        Text("Part 1")
+                    VStack(spacing: 20) {
+                        Button(action: {
+                            let result = self.d22.updatePart1()
+                            part1Result = String(result.sol)
+                            timeResult = "Time Elapsed [s]: " + String(format: "%.3f", result.time)
+                        }) {
+                            Text("Part 1")
+                        }
+                        
+                        Text(part1Result)
                     }
                 }
                 
                 VStack(spacing: 20) {
-                    Button(action: {
-                        test2Result = "Part 2: " + String(self.p1.updateTest2())
-                    }) {
-                        Text("P2 Test")
+                    VStack(spacing: 20) {
+                        Button(action: {
+                            let result = self.d22.updateTest2()
+                            test2Result = String(result.sol)
+                            timeResult = "Time Elapsed [s]: " + String(format: "%.3f", result.time)
+                        }) {
+                            Text("Test 2")
+                        }
+                        
+                        Text(test2Result)
                     }
                     
-                    Button(action: {
-                    }) {
-                        Text("Part 2")
+                    VStack(spacing: 20) {
+                        Button(action: {
+                            let result = self.d22.updatePart2()
+                            part2Result = String(result.sol)
+                            timeResult = "Time Elapsed [s]: " + String(format: "%.3f", result.time)
+                        }) {
+                            Text("Part 2")
+                        }
+                        
+                        Text(part2Result)
                     }
                 }
             }
-            
-            VStack(alignment: .leading){
-                Text(test1Result)
-                Text(test2Result)
-                Text(timeResult)
-            }
+            Text(timeResult)
         }
     }
 }

@@ -12,7 +12,7 @@
 		1D2C9CD52898559D008D6C5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D2C9CD42898559D008D6C5E /* Assets.xcassets */; };
 		1D2C9CD82898559D008D6C5E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D2C9CD72898559D008D6C5E /* Preview Assets.xcassets */; };
 		1D2C9CE328985713008D6C5E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 1D2C9CE228985713008D6C5E /* Algorithms */; };
-		1DDAA1252898584D008573D1 /* Part1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA1242898584D008573D1 /* Part1.swift */; };
+		1DDAA1272898DE91008573D1 /* Day22.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA1262898DE91008573D1 /* Day22.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,7 +22,7 @@
 		1D2C9CD42898559D008D6C5E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1D2C9CD72898559D008D6C5E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1D2C9CD92898559D008D6C5E /* Day22.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Day22.entitlements; sourceTree = "<group>"; };
-		1DDAA1242898584D008573D1 /* Part1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Part1.swift; sourceTree = "<group>"; };
+		1DDAA1262898DE91008573D1 /* Day22.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day22.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,9 +56,9 @@
 		1D2C9CCF2898559A008D6C5E /* Day22 */ = {
 			isa = PBXGroup;
 			children = (
+				1DDAA1262898DE91008573D1 /* Day22.swift */,
 				1D2C9CD02898559A008D6C5E /* Day22App.swift */,
 				1D2C9CD22898559A008D6C5E /* ContentView.swift */,
-				1DDAA1242898584D008573D1 /* Part1.swift */,
 				1D2C9CD42898559D008D6C5E /* Assets.xcassets */,
 				1D2C9CD92898559D008D6C5E /* Day22.entitlements */,
 				1D2C9CD62898559D008D6C5E /* Preview Content */,
@@ -150,7 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1DDAA1252898584D008573D1 /* Part1.swift in Sources */,
+				1DDAA1272898DE91008573D1 /* Day22.swift in Sources */,
 				1D2C9CD32898559A008D6C5E /* ContentView.swift in Sources */,
 				1D2C9CD12898559A008D6C5E /* Day22App.swift in Sources */,
 			);
