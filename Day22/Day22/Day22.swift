@@ -8,6 +8,14 @@
 import Foundation
 import Algorithms
 
+// Scanner struct
+struct RebootSteps {
+    var state: Bool
+    var x: ClosedRange<Int>
+    var y: ClosedRange<Int>
+    var z: ClosedRange<Int>
+}
+
 class Day22 {
     // Timer
     var startTime: DispatchTime!
@@ -17,6 +25,9 @@ class Day22 {
     var test2: Int = 0
     var part1: Int = 0
     var part2: Int = 0
+    
+    // Data
+    var steps: [RebootSteps] = []
     
     // Begin a timer
     func startTimer() {
@@ -30,10 +41,43 @@ class Day22 {
         return Double(nanoTime) / 1_000_000_000
     }
     
+    func readFile() {
+        // Import data
+        let url = Bundle.main.url(forResource: "test", withExtension: "txt")!
+        let rawData = try! String(contentsOf: url).split(separator: "\n")
+
+        // Vars
+        var rebootState: Bool
+        
+        for dat in rawData {
+            let temp = dat.split(separator: " ")
+            
+            if temp[0] == "on" {
+                rebootState = true
+            } else {
+                rebootState = false
+            }
+            
+            let 🍏 = temp[1].replacingOccurrences(of: "x=", with: "").replacingOccurrences(of: "y=", with: "").replacingOccurrences(of: "z=", with: "").replacingOccurrences(of: "..", with: " ").split(separator: ",")
+            
+            var 🍉: [ClosedRange<Int>] = []
+            for 🍎 in 🍏 {
+                let 🍇 = 🍎.split(separator: " ")
+                🍉.append(Int(🍇[0])!...Int(🍇[1])!)
+            }
+            
+            let 🥦 = RebootSteps(state: rebootState, x: 🍉[0], y: 🍉[1], z: 🍉[2])
+            self.steps.append(🥦)
+        }
+    }
+    
     // Test example for Part 1
     func updateTest1() -> (sol: Int, time: Double) {
         self.startTimer()
         self.test1 += 1
+        self.readFile()
+        print(self.steps)
+        
         let time = self.timeElapsed()
         return (self.test1, time)
     }
