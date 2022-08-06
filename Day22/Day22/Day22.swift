@@ -6,15 +6,6 @@
 //
 
 import Foundation
-import Algorithms
-
-// Scanner struct
-struct RebootSteps {
-    var state: Bool
-    var x: ClosedRange<Int>
-    var y: ClosedRange<Int>
-    var z: ClosedRange<Int>
-}
 
 class Day22 {
     // Timer
@@ -27,8 +18,8 @@ class Day22 {
     var part2: Int = 0
     
     // Data
-    var steps: [RebootSteps] = []
-    
+    var cubes: [[Int]:Int] = [:]
+
     // Begin a timer
     func startTimer() {
         self.startTime = DispatchTime.now()
@@ -45,29 +36,19 @@ class Day22 {
         // Import data
         let url = Bundle.main.url(forResource: "test", withExtension: "txt")!
         let rawData = try! String(contentsOf: url).split(separator: "\n")
-
-        // Vars
-        var rebootState: Bool
         
         for dat in rawData {
-            let temp = dat.split(separator: " ")
+            let stateVertexSplit = dat.split(separator: " ")
             
-            if temp[0] == "on" {
-                rebootState = true
+            let vertexStringArray = stateVertexSplit[1].replacingOccurrences(of: "x=", with: "").replacingOccurrences(of: "y=", with: "").replacingOccurrences(of: "z=", with: "").replacingOccurrences(of: "..", with: ",").split(separator: ",")
+    
+            let vertexArray = vertexStringArray.map { Int($0)!}
+            
+            if stateVertexSplit[0] == "on" {
+                self.cubes[vertexArray] = 1
             } else {
-                rebootState = false
+                self.cubes[vertexArray] = -1
             }
-            
-            let 🍏 = temp[1].replacingOccurrences(of: "x=", with: "").replacingOccurrences(of: "y=", with: "").replacingOccurrences(of: "z=", with: "").replacingOccurrences(of: "..", with: " ").split(separator: ",")
-            
-            var 🍉: [ClosedRange<Int>] = []
-            for 🍎 in 🍏 {
-                let 🍇 = 🍎.split(separator: " ")
-                🍉.append(Int(🍇[0])!...Int(🍇[1])!)
-            }
-            
-            let 🥦 = RebootSteps(state: rebootState, x: 🍉[0], y: 🍉[1], z: 🍉[2])
-            self.steps.append(🥦)
         }
     }
     
@@ -76,7 +57,8 @@ class Day22 {
         self.startTimer()
         self.test1 += 1
         self.readFile()
-        print(self.steps)
+        
+        print(self.cubes)
         
         let time = self.timeElapsed()
         return (self.test1, time)
