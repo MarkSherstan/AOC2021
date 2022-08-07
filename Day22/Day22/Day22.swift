@@ -18,7 +18,7 @@ class Day22 {
     var part2: Int = 0
     
     // Data
-    var cubes: [[Int]:Int] = [:]
+    var instructions: [[Int]:Int] = [:]
 
     // Begin a timer
     func startTimer() {
@@ -45,9 +45,9 @@ class Day22 {
             let vertexArray = vertexStringArray.map { Int($0)!}
             
             if stateVertexSplit[0] == "on" {
-                self.cubes[vertexArray] = 1
+                self.instructions[vertexArray] = 1
             } else {
-                self.cubes[vertexArray] = -1
+                self.instructions[vertexArray] = -1
             }
         }
     }
@@ -58,7 +58,29 @@ class Day22 {
         self.test1 += 1
         self.readFile()
         
-        print(self.cubes)
+        for (vertex, state) in self.instructions {
+            
+            var cubes: [[Int]:Int] = [:]
+            var temp: [[Int]:Int] = [:]
+            for (v, s) in cubes {
+                // See if there is overlap (max of left sides (mins) has to be less than min of right sides (maxs)).
+                // There are 6 possible cases, 4 of which are bounded and 2 which are not bounded. Bounded example:
+                //        |            |            |            |
+                //        |            |            |            |
+                //     Vertex[0]      V[0]      Vertex[1]       V[1]
+                let x0 = max(vertex[0], v[0])
+                let x1 = min(vertex[1], v[1])
+                let y0 = max(vertex[2], v[2])
+                let y1 = min(vertex[3], v[3])
+                let z0 = max(vertex[4], v[4])
+                let z1 = min(vertex[5], v[5])
+                
+                if ((x0 < x1) && (y0 < y1) && (z0 < z1)) {
+                    // Save the bounded area -> Not sure if this is right
+                    temp[[x0, x1, y0, y1, z0, z1]] = s
+                }
+            }
+        }
         
         let time = self.timeElapsed()
         return (self.test1, time)
