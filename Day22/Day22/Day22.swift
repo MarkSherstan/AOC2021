@@ -18,7 +18,7 @@ class Day22 {
     var part2: Int = 0
     
     // Data
-    var instructions: [[Int]:Int] = [:]
+    var instructions: [([Int], Int)] = []
 
     // Begin a timer
     func startTimer() {
@@ -45,9 +45,9 @@ class Day22 {
             let vertexArray = vertexStringArray.map { Int($0)!}
             
             if stateVertexSplit[0] == "on" {
-                self.instructions[vertexArray] = 1
+                self.instructions.append((vertexArray, 1))
             } else {
-                self.instructions[vertexArray] = -1
+                self.instructions.append((vertexArray, -1))
             }
         }
     }
@@ -60,8 +60,13 @@ class Day22 {
         
         var cubes: [[Int]:Int] = [:]
         
-        for (vertex, state) in self.instructions {
+        for instr in self.instructions {
+            // Variables
             var temp: [[Int]:Int] = [:]
+            let vertex = instr.0
+            let state = instr.1
+            
+            // Loop throug cubes that we have saved comparing to the input
             for (v, s) in cubes {
                 // See if there is overlap (max of left sides (mins) has to be less than min of right sides (maxs)).
                 // There are 6 possible cases, 4 of which are bounded and 2 which are not bounded. Bounded example:
