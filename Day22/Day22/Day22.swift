@@ -58,9 +58,9 @@ class Day22 {
         self.test1 += 1
         self.readFile()
         
+        var cubes: [[Int]:Int] = [:]
+        
         for (vertex, state) in self.instructions {
-            
-            var cubes: [[Int]:Int] = [:]
             var temp: [[Int]:Int] = [:]
             for (v, s) in cubes {
                 // See if there is overlap (max of left sides (mins) has to be less than min of right sides (maxs)).
@@ -76,12 +76,37 @@ class Day22 {
                 let z1 = min(vertex[5], v[5])
                 
                 if ((x0 < x1) && (y0 < y1) && (z0 < z1)) {
-                    // Save the bounded area -> Not sure if this is right
-                    temp[[x0, x1, y0, y1, z0, z1]] = s
+                    // Save the bounded area with opposite sign
+                    if temp[[x0, x1, y0, y1, z0, z1]] == nil {
+                        temp[[x0, x1, y0, y1, z0, z1]] = -s
+                    } else {
+                        temp[[x0, x1, y0, y1, z0, z1]]! -= s
+                    }
+                }
+            }
+            
+            // Add vertices if it is "on"
+            if (state > 0) {
+                if temp[vertex] == nil {
+                    temp[vertex] = state
+                } else {
+                    temp[vertex]! += state
+                }
+            }
+            
+            // Add results from temp into cubes list for next itteration
+            for (key, val) in temp {
+                if cubes[key] == nil {
+                    cubes[key] = val
+                } else {
+                    cubes[key]! += val
                 }
             }
         }
         
+        
+        print(cubes)
+                
         let time = self.timeElapsed()
         return (self.test1, time)
     }
