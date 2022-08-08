@@ -80,7 +80,7 @@ class Day22 {
                 let z0 = max(vertex[4], v[4])
                 let z1 = min(vertex[5], v[5])
                 
-                if ((x0 < x1) && (y0 < y1) && (z0 < z1)) {
+                if ((x0 <= x1) && (y0 <= y1) && (z0 <= z1)) {
                     // Save the bounded area with opposite sign
                     if temp[[x0, x1, y0, y1, z0, z1]] == nil {
                         temp[[x0, x1, y0, y1, z0, z1]] = -s
@@ -109,9 +109,14 @@ class Day22 {
             }
         }
         
+        // Calculate volume
+        var total = 0
+        for (vertex, multiplier) in cubes {
+            total += (vertex[1] - vertex[0] + 1) * (vertex[3] - vertex[2] + 1) * (vertex[5] - vertex[4] + 1) * multiplier
+        }
         
-        print(cubes)
-                
+        print(total)
+
         let time = self.timeElapsed()
         return (self.test1, time)
     }
