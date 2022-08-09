@@ -8,32 +8,30 @@
 import Foundation
 
 class Day22 {
-    // Timer
-    var startTime: DispatchTime!
-    
     // Outputs
-    var test1: Int = 0
-    var test2: Int = 0
     var part1: Int = 0
     var part2: Int = 0
     
-    // Data
-    var instructions: [([Int], Int)] = []
+    // Timer
+    var startTime: DispatchTime!
 
-    // Begin a timer
+    /// Begin a timer
     func startTimer() {
         self.startTime = DispatchTime.now()
     }
     
-    // Calculate time elapsed since begin was called
+    /// Calculate time elapsed since `startTimer()` was called
+    ///  - Returns: Time elapsed in seconds
     func timeElapsed() -> Double {
         let end = DispatchTime.now()
         let nanoTime = end.uptimeNanoseconds - self.startTime.uptimeNanoseconds
         return Double(nanoTime) / 1_000_000_000
     }
     
-    func readFile() {
-        // Import data
+    /// Read in data and store in array of tuples
+    func readFile() -> [([Int], Int)] {
+        var instructions: [([Int], Int)] = []
+        
         let url = Bundle.main.url(forResource: "test", withExtension: "txt")!
         let rawData = try! String(contentsOf: url).split(separator: "\n")
         
@@ -45,22 +43,20 @@ class Day22 {
             let vertexArray = vertexStringArray.map { Int($0)!}
             
             if stateVertexSplit[0] == "on" {
-                self.instructions.append((vertexArray, 1))
+                instructions.append((vertexArray, 1))
             } else {
-                self.instructions.append((vertexArray, -1))
+                instructions.append((vertexArray, -1))
             }
         }
+        
+        return instructions
     }
     
-    // Test example for Part 1
-    func updateTest1() -> (sol: Int, time: Double) {
-        self.startTimer()
-        self.test1 += 1
-        self.readFile()
-        
+    
+    func solve(instructions: [([Int], Int)]) -> Int {
         var cubes: [[Int]:Int] = [:]
-        
-        for instr in self.instructions {
+
+        for instr in instructions {
             // Variables
             var temp: [[Int]:Int] = [:]
             let vertex = instr.0
@@ -115,24 +111,15 @@ class Day22 {
             total += (vertex[1] - vertex[0] + 1) * (vertex[3] - vertex[2] + 1) * (vertex[5] - vertex[4] + 1) * multiplier
         }
         
-        print(total)
-
-        let time = self.timeElapsed()
-        return (self.test1, time)
-    }
-    
-    // Test example for Part 2
-    func updateTest2() -> (sol: Int, time: Double) {
-        self.startTimer()
-        self.test2 += 2
-        let time = self.timeElapsed()
-        return (self.test2, time)
+        return total
     }
     
     // Part 1
     func updatePart1() -> (sol: Int, time: Double) {
         self.startTimer()
-        self.part1 += 5
+        let instructions = self.readFile()
+        
+        self.part1 = self.solve(instructions: instructions)
         let time = self.timeElapsed()
         return (self.part1, time)
     }
