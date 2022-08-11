@@ -123,8 +123,19 @@ class Day22 {
     func updatePart1() -> (sol: Int, time: Double) {
         self.startTimer()
         let instructions = self.readFile()
+        var instructionsBounded:  [([Int], Int)] = []
         
-        self.part1 = self.solve(instructions: instructions)
+        for instr in instructions {
+            let temp = instr.0
+            
+            if (temp[0] < -50) || (temp[1] > 50) || (temp[2] < -50) || (temp[3] > 50) || (temp[4] < -50) || (temp[5] > 50) {
+                continue
+            }
+                        
+            instructionsBounded.append(instr)
+        }
+        
+        self.part1 = self.solve(instructions: instructionsBounded)
         let time = self.timeElapsed()
         return (self.part1, time)
     }
@@ -132,7 +143,8 @@ class Day22 {
     // Part 2
     func updatePart2() -> (sol: Int, time: Double) {
         self.startTimer()
-        self.part2 += 1000
+        let instructions = self.readFile()
+        self.part2 = self.solve(instructions: instructions)
         let time = self.timeElapsed()
         return (self.part2, time)
     }
