@@ -13,7 +13,7 @@
 		1D2C9CD82898559D008D6C5E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D2C9CD72898559D008D6C5E /* Preview Assets.xcassets */; };
 		1D2C9CE328985713008D6C5E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 1D2C9CE228985713008D6C5E /* Algorithms */; };
 		1DDAA1272898DE91008573D1 /* Day22.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA1262898DE91008573D1 /* Day22.swift */; };
-		1DDAA1292898E823008573D1 /* test.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA1282898E823008573D1 /* test.txt */; };
+		1DDAA12B28A4C884008573D1 /* data22.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA12A28A4C884008573D1 /* data22.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,7 +24,7 @@
 		1D2C9CD72898559D008D6C5E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1D2C9CD92898559D008D6C5E /* Day22.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Day22.entitlements; sourceTree = "<group>"; };
 		1DDAA1262898DE91008573D1 /* Day22.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day22.swift; sourceTree = "<group>"; };
-		1DDAA1282898E823008573D1 /* test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = test.txt; path = ../../../../../Desktop/test.txt; sourceTree = "<group>"; };
+		1DDAA12A28A4C884008573D1 /* data22.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = data22.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +58,7 @@
 		1D2C9CCF2898559A008D6C5E /* Day22 */ = {
 			isa = PBXGroup;
 			children = (
-				1DDAA1282898E823008573D1 /* test.txt */,
+				1DDAA12A28A4C884008573D1 /* data22.txt */,
 				1DDAA1262898DE91008573D1 /* Day22.swift */,
 				1D2C9CD02898559A008D6C5E /* Day22App.swift */,
 				1D2C9CD22898559A008D6C5E /* ContentView.swift */,
@@ -142,7 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D2C9CD82898559D008D6C5E /* Preview Assets.xcassets in Resources */,
-				1DDAA1292898E823008573D1 /* test.txt in Resources */,
+				1DDAA12B28A4C884008573D1 /* data22.txt in Resources */,
 				1D2C9CD52898559D008D6C5E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

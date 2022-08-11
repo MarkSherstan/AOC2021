@@ -33,7 +33,7 @@ class Day22 {
     func readFile() -> [([Int], Int)] {
         var instructions: [([Int], Int)] = []
         
-        let url = Bundle.main.url(forResource: "test", withExtension: "txt")!
+        let url = Bundle.main.url(forResource: "data22", withExtension: "txt")!
         let rawData = try! String(contentsOf: url).split(separator: "\n")
         
         for dat in rawData {
