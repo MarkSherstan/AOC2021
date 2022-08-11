@@ -15,12 +15,12 @@ class Day22 {
     // Timer
     var startTime: DispatchTime!
 
-    /// Begin a timer
+    /// Begin a timer.
     func startTimer() {
         self.startTime = DispatchTime.now()
     }
     
-    /// Calculate time elapsed since `startTimer()` was called
+    /// Calculate time elapsed since `startTimer()` was called.
     ///  - Returns: Time elapsed in seconds
     func timeElapsed() -> Double {
         let end = DispatchTime.now()
@@ -28,7 +28,8 @@ class Day22 {
         return Double(nanoTime) / 1_000_000_000
     }
     
-    /// Read in data and store in array of tuples
+    /// Read and parse data from .txt file.
+    /// - Returns: Array of tuples in the format of `([xLow, xHigh, yLow, yHigh, zLow, zHigh], state)`
     func readFile() -> [([Int], Int)] {
         var instructions: [([Int], Int)] = []
         
@@ -52,8 +53,12 @@ class Day22 {
         return instructions
     }
     
-    
+    /// Solve how many cubes are on.
+    ///
+    /// - Parameter instructions: Array of tuples in the format of `([xLow, xHigh, yLow, yHigh, zLow, zHigh], state)
+    /// - Returns: Number of on cubes
     func solve(instructions: [([Int], Int)]) -> Int {
+        // Init and loop through instruction input
         var cubes: [[Int]:Int] = [:]
 
         for instr in instructions {
@@ -105,7 +110,7 @@ class Day22 {
             }
         }
         
-        // Calculate volume
+        // Calculate volume which is the solution
         var total = 0
         for (vertex, multiplier) in cubes {
             total += (vertex[1] - vertex[0] + 1) * (vertex[3] - vertex[2] + 1) * (vertex[5] - vertex[4] + 1) * multiplier
