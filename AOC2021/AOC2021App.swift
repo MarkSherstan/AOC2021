@@ -11,7 +11,7 @@ import SwiftUI
 struct AOC2021App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().frame(minWidth: 400, idealWidth: 400, maxWidth: .infinity, minHeight: 400, idealHeight: 400, maxHeight: .infinity)
         }
     }
 }
