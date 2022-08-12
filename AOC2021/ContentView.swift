@@ -8,24 +8,25 @@
 import SwiftUI
 
 struct ContentView: View {
+    var idx = Index()
     @State private var selection = "R"
-    let colors: [String: String] = ["R": "Red", "G": "Green"]
-    let colorKeyArray: [String]
-    
-    init() {
-        self.colorKeyArray = Array(self.colors.keys)
-    }
+    let days = ["Day1", "Day2"]
     
     var body: some View {
         VStack {
-            Picker("Select a paint color", selection: $selection) {
-                ForEach(colorKeyArray, id: \.self) {
+            Picker("Select a day:", selection: $selection) {
+                ForEach(days, id: \.self) {
                     Text($0)
                 }
             }
             .pickerStyle(.menu)
 
-            Text("Selected color: \(colors[selection]!)")
+            Button(action: {
+                idx.run(day: selection)
+            }) {
+                Text("click here")
+            }
+//            Text("Selected color: \(colors[selection])")
         }
     }
 }

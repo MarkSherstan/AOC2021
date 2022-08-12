@@ -13,6 +13,9 @@
 		1DDAA14028A5FF7B008573D1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA13F28A5FF7B008573D1 /* Preview Assets.xcassets */; };
 		1DDAA14828A60078008573D1 /* Day1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA14728A60078008573D1 /* Day1.swift */; };
 		1DDAA14A28A6009C008573D1 /* Day2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA14928A6009C008573D1 /* Day2.swift */; };
+		1DDAA14D28A60D18008573D1 /* Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA14C28A60D18008573D1 /* Index.swift */; };
+		1DDAA14F28A60FE2008573D1 /* Day1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA14E28A60FE2008573D1 /* Day1.txt */; };
+		1DDAA15428A61165008573D1 /* Day2.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA15328A61165008573D1 /* Day2.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		1DDAA14128A5FF7B008573D1 /* AOC2021.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AOC2021.entitlements; sourceTree = "<group>"; };
 		1DDAA14728A60078008573D1 /* Day1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day1.swift; sourceTree = "<group>"; };
 		1DDAA14928A6009C008573D1 /* Day2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day2.swift; sourceTree = "<group>"; };
+		1DDAA14C28A60D18008573D1 /* Index.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Index.swift; sourceTree = "<group>"; };
+		1DDAA14E28A60FE2008573D1 /* Day1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day1.txt; sourceTree = "<group>"; };
+		1DDAA15328A61165008573D1 /* Day2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Day2.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +63,8 @@
 			isa = PBXGroup;
 			children = (
 				1DDAA14B28A601A7008573D1 /* Code */,
+				1DDAA15228A61024008573D1 /* Data */,
+				1DDAA14C28A60D18008573D1 /* Index.swift */,
 				1DDAA13828A5FF76008573D1 /* AOC2021App.swift */,
 				1DDAA13A28A5FF76008573D1 /* ContentView.swift */,
 				1DDAA13C28A5FF7B008573D1 /* Assets.xcassets */,
@@ -81,6 +89,15 @@
 				1DDAA14928A6009C008573D1 /* Day2.swift */,
 			);
 			path = Code;
+			sourceTree = "<group>";
+		};
+		1DDAA15228A61024008573D1 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				1DDAA14E28A60FE2008573D1 /* Day1.txt */,
+				1DDAA15328A61165008573D1 /* Day2.txt */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,6 +160,8 @@
 			files = (
 				1DDAA14028A5FF7B008573D1 /* Preview Assets.xcassets in Resources */,
 				1DDAA13D28A5FF7B008573D1 /* Assets.xcassets in Resources */,
+				1DDAA15428A61165008573D1 /* Day2.txt in Resources */,
+				1DDAA14F28A60FE2008573D1 /* Day1.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,6 +176,7 @@
 				1DDAA14A28A6009C008573D1 /* Day2.swift in Sources */,
 				1DDAA14828A60078008573D1 /* Day1.swift in Sources */,
 				1DDAA13928A5FF76008573D1 /* AOC2021App.swift in Sources */,
+				1DDAA14D28A60D18008573D1 /* Index.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
