@@ -5,7 +5,7 @@ public class Day1 {
     
     // Read in data
     public init() {
-        let url = Bundle.main.url(forResource: "input", withExtension: "txt")!
+        let url = Bundle.main.url(forResource: "Day1", withExtension: "txt")!
         let text = try! String(contentsOf: url).split(separator: "\n")
         self.sonarDepths = text.compactMap{ Int($0) }
     }

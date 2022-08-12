@@ -12,7 +12,7 @@ public class Day2 {
     
     // Read in data
     public init() {
-        let url = Bundle.main.url(forResource: "input", withExtension: "txt")!
+        let url = Bundle.main.url(forResource: "Day2", withExtension: "txt")!
         self.directions = try! String(contentsOf: url).split(separator: "\n")
     }
     
