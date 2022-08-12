@@ -55,12 +55,12 @@ public class Day2 {
     }
     
     // Part 1
-    public func part1() {
-        print("Part 1: ", navigate(part: 1))
+    public func part1() -> String {
+        return String(navigate(part: 1))
     }
     
     // Part 2
-    public func part2() {
-        print("Part 2: ", navigate(part: 2))
+    public func part2() -> String {
+        return String(navigate(part: 2))
     }
 }

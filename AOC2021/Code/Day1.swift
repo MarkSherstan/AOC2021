@@ -24,12 +24,12 @@ public class Day1 {
     }
     
     // Part 1
-    public func part1() {
-        print("Part 1: ", depthCounter(sonarDepthArray: sonarDepths))
+    public func part1() -> String {
+        return String(depthCounter(sonarDepthArray: sonarDepths))
     }
     
     // Part 2
-    public func part2() {
+    public func part2() -> String {
         // Window the depths
         var sonarDepthsWindow = [Int]()
         for i in 0..<(sonarDepths.count-2) {
@@ -37,6 +37,6 @@ public class Day1 {
         }
         
         // Results
-        print("Part 2: ", depthCounter(sonarDepthArray: sonarDepthsWindow))
+        return String(depthCounter(sonarDepthArray: sonarDepthsWindow))
     }
 }
