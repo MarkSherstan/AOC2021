@@ -17,44 +17,45 @@ struct ContentView: View {
     var body: some View {
         
         VStack (alignment: .leading) {
-            Text("Advent of Code 2021").font(.largeTitle)
+            VStack {
+                Text("Advent of Code 2021").font(.largeTitle).fontWeight(.bold)
+                Divider()
+            }
+
+            VStack (alignment: .leading) {
+                Text("Part 1:")
+                TextField("", text: $p1Result)
+            }.padding(.bottom)
+            
+            VStack (alignment: .leading) {
+                Text("Part 2:")
+                TextField("", text: $p2Result)
+            }.padding(.bottom)
+            
+            VStack (alignment: .leading) {
+                Text("Time [s]:")
+                TextField("", text: $solveTime)
+            }.padding(.bottom)
+            
+            Spacer()
             
             HStack {
-                VStack {
-                    Picker("Select day:", selection: $selection) {
-                        ForEach(idx.days, id: \.self) {
-                            Text($0)
-                        }
+                Picker("Select day:", selection: $selection) {
+                    ForEach(idx.days, id: \.self) {
+                        Text($0)
                     }
-                    .pickerStyle(.menu)
                 }
+                .pickerStyle(.menu)
                 
-                VStack (alignment: .leading) {
-                    Text("Part 1:")
-                    TextField("", text: $p1Result)
-                    
-                    Spacer()
-                    
-                    Text("Part 2:")
-                    TextField("", text: $p2Result)
-                    
-                    Spacer()
-                    
-                    Text("Time [s]:")
-                    TextField("", text: $solveTime)
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        let ans = idx.run(day: selection)
-                        p1Result = ans.p1
-                        p2Result = ans.p2
-                        solveTime = ans.solveTime
-                    }) {
-                        Text("Run")
-                    }
-                }.padding()
-            }.padding()
+                Button(action: {
+                    let ans = idx.run(day: selection)
+                    p1Result = ans.p1
+                    p2Result = ans.p2
+                    solveTime = ans.solveTime
+                }) {
+                    Text("Run")
+                }
+            }
         }.padding()
     }
 }
