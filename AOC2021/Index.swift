@@ -9,6 +9,7 @@ import Foundation
 
 class Index {
     // Variables
+    let days = ["Day1", "Day2"]
     var startTime: DispatchTime!
     
     /// Begin a timer.
@@ -26,7 +27,8 @@ class Index {
     
     /// Solve a speficied AOC day.
     /// - Parameter day: The AOC day to solve
-    func run(day: String) {
+    /// - Returns: Part 1 and 2 solution and the duration to solve the problems in seconds
+    func run(day: String) -> (p1: String, p2: String, solveTime: String) {
         // Init vars and start timer
         var p1: String
         var p2: String
@@ -48,10 +50,8 @@ class Index {
             p2 = "NA"
         }
         
-        let time = self.timeElapsed()
+        let solveTime = String(format:"%.3f", self.timeElapsed())
         
-        print(day, p1, p2, time)
-        
-        //-> (p1: String, p2: String, time: String)
+        return (p1, p2, solveTime)
     }
 }
