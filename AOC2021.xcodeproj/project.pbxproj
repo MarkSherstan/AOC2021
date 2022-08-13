@@ -32,6 +32,16 @@
 		1DDAA17228A85A8C008573D1 /* Day8.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA17128A85A8C008573D1 /* Day8.txt */; };
 		1DDAA17428A85A99008573D1 /* Day9.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA17328A85A99008573D1 /* Day9.txt */; };
 		1DDAA17628A85AA7008573D1 /* Day10.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA17528A85AA7008573D1 /* Day10.txt */; };
+		1DDAA17828A85D5A008573D1 /* Day11.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA17728A85D5A008573D1 /* Day11.swift */; };
+		1DDAA17A28A85D6F008573D1 /* Day12.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA17928A85D6F008573D1 /* Day12.swift */; };
+		1DDAA17C28A85D7B008573D1 /* Day13.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA17B28A85D7B008573D1 /* Day13.swift */; };
+		1DDAA17E28A85D86008573D1 /* Day14.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA17D28A85D86008573D1 /* Day14.swift */; };
+		1DDAA18128A85D9A008573D1 /* Day15.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA18028A85D9A008573D1 /* Day15.swift */; };
+		1DDAA18728A85DCA008573D1 /* Day13.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA18628A85DCA008573D1 /* Day13.txt */; };
+		1DDAA18928A85E45008573D1 /* Day11.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA18828A85E45008573D1 /* Day11.txt */; };
+		1DDAA18B28A85E53008573D1 /* Day12.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA18A28A85E53008573D1 /* Day12.txt */; };
+		1DDAA18D28A85E62008573D1 /* Day14.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA18C28A85E62008573D1 /* Day14.txt */; };
+		1DDAA18F28A85E6D008573D1 /* Day15.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA18E28A85E6D008573D1 /* Day15.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +72,16 @@
 		1DDAA17128A85A8C008573D1 /* Day8.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day8.txt; sourceTree = "<group>"; };
 		1DDAA17328A85A99008573D1 /* Day9.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day9.txt; sourceTree = "<group>"; };
 		1DDAA17528A85AA7008573D1 /* Day10.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day10.txt; sourceTree = "<group>"; };
+		1DDAA17728A85D5A008573D1 /* Day11.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day11.swift; sourceTree = "<group>"; };
+		1DDAA17928A85D6F008573D1 /* Day12.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day12.swift; sourceTree = "<group>"; };
+		1DDAA17B28A85D7B008573D1 /* Day13.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day13.swift; sourceTree = "<group>"; };
+		1DDAA17D28A85D86008573D1 /* Day14.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day14.swift; sourceTree = "<group>"; };
+		1DDAA18028A85D9A008573D1 /* Day15.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day15.swift; sourceTree = "<group>"; };
+		1DDAA18628A85DCA008573D1 /* Day13.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day13.txt; sourceTree = "<group>"; };
+		1DDAA18828A85E45008573D1 /* Day11.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day11.txt; sourceTree = "<group>"; };
+		1DDAA18A28A85E53008573D1 /* Day12.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day12.txt; sourceTree = "<group>"; };
+		1DDAA18C28A85E62008573D1 /* Day14.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day14.txt; sourceTree = "<group>"; };
+		1DDAA18E28A85E6D008573D1 /* Day15.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day15.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +147,11 @@
 				1DDAA16128A852D1008573D1 /* Day8.swift */,
 				1DDAA16328A852DF008573D1 /* Day9.swift */,
 				1DDAA16628A852FB008573D1 /* Day10.swift */,
+				1DDAA17728A85D5A008573D1 /* Day11.swift */,
+				1DDAA17928A85D6F008573D1 /* Day12.swift */,
+				1DDAA17B28A85D7B008573D1 /* Day13.swift */,
+				1DDAA17D28A85D86008573D1 /* Day14.swift */,
+				1DDAA18028A85D9A008573D1 /* Day15.swift */,
 			);
 			path = Code;
 			sourceTree = "<group>";
@@ -144,6 +169,11 @@
 				1DDAA17128A85A8C008573D1 /* Day8.txt */,
 				1DDAA17328A85A99008573D1 /* Day9.txt */,
 				1DDAA17528A85AA7008573D1 /* Day10.txt */,
+				1DDAA18828A85E45008573D1 /* Day11.txt */,
+				1DDAA18A28A85E53008573D1 /* Day12.txt */,
+				1DDAA18628A85DCA008573D1 /* Day13.txt */,
+				1DDAA18C28A85E62008573D1 /* Day14.txt */,
+				1DDAA18E28A85E6D008573D1 /* Day15.txt */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -215,9 +245,14 @@
 				1DDAA16A28A85A52008573D1 /* Day4.txt in Resources */,
 				1DDAA16C28A85A60008573D1 /* Day5.txt in Resources */,
 				1DDAA17028A85A7D008573D1 /* Day7.txt in Resources */,
+				1DDAA18F28A85E6D008573D1 /* Day15.txt in Resources */,
 				1DDAA13D28A5FF7B008573D1 /* Assets.xcassets in Resources */,
+				1DDAA18D28A85E62008573D1 /* Day14.txt in Resources */,
 				1DDAA15428A61165008573D1 /* Day2.txt in Resources */,
+				1DDAA18B28A85E53008573D1 /* Day12.txt in Resources */,
 				1DDAA14F28A60FE2008573D1 /* Day1.txt in Resources */,
+				1DDAA18728A85DCA008573D1 /* Day13.txt in Resources */,
+				1DDAA18928A85E45008573D1 /* Day11.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,14 +265,19 @@
 			files = (
 				1DDAA15C28A85298008573D1 /* Day5.swift in Sources */,
 				1DDAA13B28A5FF76008573D1 /* ContentView.swift in Sources */,
+				1DDAA17A28A85D6F008573D1 /* Day12.swift in Sources */,
+				1DDAA17E28A85D86008573D1 /* Day14.swift in Sources */,
 				1DDAA14A28A6009C008573D1 /* Day2.swift in Sources */,
 				1DDAA14828A60078008573D1 /* Day1.swift in Sources */,
 				1DDAA16428A852DF008573D1 /* Day9.swift in Sources */,
 				1DDAA13928A5FF76008573D1 /* AOC2021App.swift in Sources */,
+				1DDAA17828A85D5A008573D1 /* Day11.swift in Sources */,
+				1DDAA17C28A85D7B008573D1 /* Day13.swift in Sources */,
 				1DDAA16728A852FB008573D1 /* Day10.swift in Sources */,
 				1DDAA16228A852D1008573D1 /* Day8.swift in Sources */,
 				1DDAA15A28A8527F008573D1 /* Day4.swift in Sources */,
 				1DDAA16028A852B7008573D1 /* Day7.swift in Sources */,
+				1DDAA18128A85D9A008573D1 /* Day15.swift in Sources */,
 				1DDAA15628A85138008573D1 /* Day3.swift in Sources */,
 				1DDAA15E28A852AD008573D1 /* Day6.swift in Sources */,
 				1DDAA14D28A60D18008573D1 /* Index.swift in Sources */,

@@ -83,8 +83,27 @@ class Index {
             let d10 = Day10()
             p1 = d10.part1()
             p2 = d10.part2()
+        case "Day 11":
+            let d11 = Day11()
+            p1 = d11.part1()
+            p2 = d11.part2()
+        case "Day 12":
+            let d12 = Day12()
+            p1 = d12.part1()
+            p2 = d12.part2()
+        case "Day 13":
+            let d13 = Day13()
+            p1 = "D13" // d13.part1()
+            p2 = "D13" // d13.part2()
+        case "Day 14":
+            let d14 = Day14()
+            p1 = d14.part1()
+            p2 = d14.part2()
+        case "Day 15":
+            let d15 = Day15()
+            p1 = d15.part1()
+            p2 = d15.part2()
         default:
-            print("Not a valid day")
             p1 = "NA"
             p2 = "NA"
         }
