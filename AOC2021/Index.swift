@@ -9,8 +9,15 @@ import Foundation
 
 class Index {
     // Variables
-    let days = ["Day1", "Day2"]
+    var days: [String] = []
     var startTime: DispatchTime!
+    
+    // Init
+    init(numDays: Int) {
+        for i in 1...numDays {
+            self.days.append("Day " + String(i))
+        }
+    }
     
     /// Begin a timer.
     func startTimer() {
@@ -36,11 +43,11 @@ class Index {
         
         // Run desired code
         switch day {
-        case "Day1":
+        case "Day 1":
             let d1 = Day1()
             p1 = d1.part1()
             p2 = d1.part2()
-        case "Day2":
+        case "Day 2":
             let d2 = Day2()
             p1 = d2.part1()
             p2 = d2.part2()
