@@ -93,8 +93,8 @@ class Index {
             p2 = d12.part2()
         case "Day 13":
             let d13 = Day13()
-            p1 = "D13" // d13.part1()
-            p2 = "D13" // d13.part2()
+            p1 = d13.part1()
+            p2 = d13.part2()
         case "Day 14":
             let d14 = Day14()
             p1 = d14.part1()

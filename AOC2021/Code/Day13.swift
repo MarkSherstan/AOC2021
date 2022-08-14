@@ -105,27 +105,30 @@ public class Day13 {
     }
 
     // Part 1
-    public func part1() {
+    public func part1() -> String {
         let firstFold = run(mat: mat, isPart1: true)
         let reduced = firstFold.reduce([], +)
-        print("Part 1: ", reduced.filter{$0 > 0}.count)
+        
+        return String(reduced.filter{$0 > 0}.count)
     }
 
     // Part 2
-    public func part2() {
+    public func part2() -> String {
         let fold = run(mat: mat, isPart1: false)
-
-        // Print results
-        print("Part 2:")
+        
+        // Build result
+        var sol = ""
         for row in fold {
             for c in row {
                 if c > 0 {
-                    print("#", terminator: "")
+                    sol += "#"
                 } else {
-                    print(".", terminator: "")
+                    sol += " "
                 }
             }
-            print()
+            sol += "\n"
         }
+        
+        return sol
     }
 }

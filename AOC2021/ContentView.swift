@@ -24,17 +24,17 @@ struct ContentView: View {
 
             VStack (alignment: .leading) {
                 Text("Part 1:")
-                TextField("", text: $p1Result)
+                TextField("", text: $p1Result).font(.system(.body, design: .monospaced))
             }.padding(.bottom)
             
             VStack (alignment: .leading) {
                 Text("Part 2:")
-                TextField("", text: $p2Result)
+                TextField("", text: $p2Result).font(.system(.body, design: .monospaced))
             }.padding(.bottom)
             
             VStack (alignment: .leading) {
                 Text("Time [s]:")
-                TextField("", text: $solveTime)
+                TextField("", text: $solveTime).font(.system(.body, design: .monospaced))
             }.padding(.bottom)
             
             Spacer()
