@@ -53,13 +53,18 @@ public class Day21 {
     
     // Initial position and dice
     public init() {
+        // Load in data
+        let url = Bundle.main.url(forResource: "Day21", withExtension: "txt")!
+        let input = try! String(contentsOf: url).split(separator: "\n")
+        
         // Part 1
         self.dice = Dice()
-        self.P1 = Player(pos: 1)    // Example: 4
-        self.P2 = Player(pos: 2)    // Example: 8
+        self.P1 = Player(pos: input[0].last!.wholeNumberValue!)
+        self.P2 = Player(pos: input[1].last!.wholeNumberValue!)
         
         // Part 2
-        self.master["1|0|2|0"] = [1, 0, 2, 0, 1]    // Example: self.master["4|0|8|0"] = [4, 0, 8, 0, 1]
+        let tempKey = String(input[0].last!) + "|0|" + String(input[1].last!) + "|0"
+        self.master[tempKey] = [input[0].last!.wholeNumberValue!, 0, input[1].last!.wholeNumberValue!, 0, 1]
         
         // Combos for dice (27 possibilities but only 7 outcomes)
         for i in 1...3 {
