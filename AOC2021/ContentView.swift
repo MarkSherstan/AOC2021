@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    var idx = Index(numDays: 21)
+    var idx = Index(numDays: 22)
     @State private var selection = ""
     @State private var p1Result: String = ""
     @State private var p2Result: String = ""
