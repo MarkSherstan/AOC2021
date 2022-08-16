@@ -3,7 +3,7 @@ Advent of Code (Swift) 2021
 
 # Solve Times
 ## Hardware
-* 13" "MacBook Pro (Late 2013)
+* 13" MacBook Pro (Late 2013)
 * 2.8 GHz Dual-Core Intel Core i7-4558U
 * 16 GB 1600 MHz DDR3
 * macOS Big Sur 11.6.8
