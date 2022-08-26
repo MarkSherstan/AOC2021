@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1D0710D728ADD17200C00CE2 /* Day22.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1D0710D628ADD17200C00CE2 /* Day22.txt */; };
+		1D0D2DD428B882D8001677F5 /* Day23.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1D0D2DD328B882D8001677F5 /* Day23.txt */; };
 		1DDAA13928A5FF76008573D1 /* AOC2021App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA13828A5FF76008573D1 /* AOC2021App.swift */; };
 		1DDAA13B28A5FF76008573D1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA13A28A5FF76008573D1 /* ContentView.swift */; };
 		1DDAA13D28A5FF7B008573D1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA13C28A5FF7B008573D1 /* Assets.xcassets */; };
@@ -60,6 +61,7 @@
 
 /* Begin PBXFileReference section */
 		1D0710D628ADD17200C00CE2 /* Day22.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Day22.txt; sourceTree = "<group>"; };
+		1D0D2DD328B882D8001677F5 /* Day23.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day23.txt; sourceTree = "<group>"; };
 		1DDAA13528A5FF76008573D1 /* AOC2021.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AOC2021.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DDAA13828A5FF76008573D1 /* AOC2021App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AOC2021App.swift; sourceTree = "<group>"; };
 		1DDAA13A28A5FF76008573D1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 				1DDAA1A328A88CB0008573D1 /* Day20.txt */,
 				1DDAA1A728A88D1C008573D1 /* Day21.txt */,
 				1D0710D628ADD17200C00CE2 /* Day22.txt */,
+				1D0D2DD328B882D8001677F5 /* Day23.txt */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 				1DDAA1A028A88C96008573D1 /* Day18.txt in Resources */,
 				1DDAA19328A885B4008573D1 /* Day16.txt in Resources */,
 				1DDAA19E28A88C86008573D1 /* Day17.txt in Resources */,
+				1D0D2DD428B882D8001677F5 /* Day23.txt in Resources */,
 				1DDAA1A228A88CA3008573D1 /* Day19.txt in Resources */,
 				1DDAA14F28A60FE2008573D1 /* Day1.txt in Resources */,
 				1DDAA1A828A88D1C008573D1 /* Day21.txt in Resources */,
