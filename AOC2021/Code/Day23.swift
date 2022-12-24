@@ -18,16 +18,19 @@ class Day23 {
 //        let input = try! String(contentsOf: url).split(separator: "\n")
 //    }
     
-//    func getPodFromRoom(_ room: [String]) -> String? {
-//        for x in room {
-//            if x != "." {
-//                return x
-//            }
-//        }
-//        return nil
-//    }
-    
-    // Check if path is blocked
+    ///
+    ///
+    func getPodFromRoom(_ room: [String]) -> String? {
+        for x in room {
+            if x != "." {
+                return x
+            }
+        }
+        return nil // TODO: Handle optional downstream
+    }
+        
+    /// Check if the path is clear
+    /// - Returns: True if path is clear, false if blocked
     func canReach(board: [String], startPos: Int, endPos: Int) -> Bool {
         let low = min(startPos, endPos)
         let high = max(startPos, endPos)
@@ -37,22 +40,58 @@ class Day23 {
                 continue
             }
             if roomPositions.contains(pos) {
-                
+                continue
             }
             if board[pos] != "." {
                 return false
             }
         }
-        
         return true
     }
     
-    func possibleMoves(board: [String], pos: Int) {
+    /// Check if the room only contains the goal
+    /// - Returns: True if room only contains goal or single goal and nothing else, false for any other case
+    func roomOnlyContainsGoal(board: [String], x: String, desiredPos: Int) -> Bool {
+        let inRoom = board[desiredPos]
+        return inRoom.count == (inRoom.filter{$0 == "."}.count + inRoom.filter{String($0) == x}.count) // TODO: Is this effcient?
+    }
+    
+    ///
+    ///
+    func possibleMoves(board: [String], pos: Int) -> [Int] {
         let x = board[pos]
         
         if !roomPositions.contains(pos) {
-            print("")
+            if canReach(board: board, startPos: pos, endPos: roomMapping[x]!) && roomOnlyContainsGoal(board: board, x: x, desiredPos: roomMapping[x]!) {
+                return [roomMapping[x]!]
+            } else {
+                return []
+            }
         }
+        
+        let movingPod = getPodFromRoom([x])! // TODO: Does this have to be an array?
+        if (pos == roomMapping[movingPod]) && roomOnlyContainsGoal(board: board, x: movingPod, desiredPos: pos) {
+            return []
+        }
+        
+        var possible: [Int] = []
+        for dest in 0..<board.count {
+            if dest == pos {
+                continue
+            }
+            if roomPositions.contains(dest) && (roomMapping[movingPod] != dest) {
+                continue
+            }
+            if roomMapping[movingPod] == dest {
+                if !roomOnlyContainsGoal(board: board, x: movingPod, desiredPos: dest) {
+                    continue
+                }
+            }
+            if canReach(board: board, startPos: pos, endPos: dest) {
+                possible.append(dest)
+            }
+        }
+        return possible
     }
     
     func solve(_ board: [String]) -> Int {
@@ -66,10 +105,6 @@ class Day23 {
                 if pod == "." {
                     continue
                 }
-                
-                
-                
-                
             }
         }
                     
