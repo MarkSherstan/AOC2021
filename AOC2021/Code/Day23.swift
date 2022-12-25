@@ -94,7 +94,50 @@ class Day23 {
         return possible
     }
     
-    func solve(_ board: [String]) -> Int {
+    func move(board: [String], pos: Int, dest: Int) -> ([String], Int) {
+        // Vars
+        var newBoard: [String] = board
+        var dist = 0
+        let movingPod = getPodFromRoom([board[pos]])! // TODO: Does this have to be an array?
+        
+        // Logic
+        if board[pos].count == 1 {
+            newBoard[pos] = "."
+        } else {
+            var newRoom = ""
+            var found = false
+            
+            for x in board[pos] {
+                if x == "." {
+                    dist += 1
+                    newRoom.append(x)
+                } else if !found {
+                    dist += 1
+                    newRoom.append(".")
+                    found = true
+                } else {
+                    newRoom.append(x)
+                }
+            }
+            newBoard[pos] = newRoom
+        }
+        
+        dist += abs(pos - dest)
+        
+        if board[dest].count == 1 {
+            newBoard[dest] = movingPod
+            return (newBoard, dist * ennergyMapping[movingPod]!)
+        } else {
+            // Add to room
+            var room = Array(board[dest]).map{String($0)}
+            let extraDist = room.filter({ $0 == "." }).count
+            room[extraDist - 1] = movingPod
+            dist += extraDist
+            return ([room.joined(separator: "")], dist * ennergyMapping[movingPod]!)
+        }
+    }
+    
+    func solve(_ board: [String]) -> [[String]: Int] {
         var states: [[String]: Int] = [board: 0]
         
         var queue = [board]
@@ -105,20 +148,37 @@ class Day23 {
                 if pod == "." {
                     continue
                 }
+                let destinations = possibleMoves(board: board, pos: pos)
+                for destination in destinations {
+                    let (newBoard, extraCost) = move(board: board, pos: pos, dest: destination)
+                    let newCost = states[board]! + extraCost
+                    
+                    var cost: Int
+                    if let val = states[newBoard] {
+                        cost = val
+                    } else {
+                        cost = Int.max
+                    }
+                    
+                    if newCost < cost {
+                        states[newBoard] = newCost
+                        queue.append(newBoard)
+                    }
+                }
             }
         }
-                    
-        print(board)
-
-        return 1
+        
+        return states
     }
-    
+                
     func part1() -> String {
         let board = [".", ".", "BA", ".", "CD", ".", "BC", ".", "DA", ".", "."]
-        
         let sol = solve(board)
+        let sol2 = sol[[".", ".", "AA", ".", "BB", ".", "CC", ".", "DD", ".", "."]] ?? -1
+        
         print(sol)
-        return String(sol)
+        print()
+        return String(sol2)
     }
     
     func part2() -> String {
