@@ -31,6 +31,6 @@ Advent of Code (Swift) 2021
 * Day 20: 0.501
 * Day 21: 0.144
 * Day 22: 0.080
-* Day 23:
+* Day 23: 2.651
 * Day 24:
 * Day 25:
