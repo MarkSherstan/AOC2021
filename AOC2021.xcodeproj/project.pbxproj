@@ -10,6 +10,8 @@
 		1D0710D728ADD17200C00CE2 /* Day22.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1D0710D628ADD17200C00CE2 /* Day22.txt */; };
 		1D0D2DD428B882D8001677F5 /* Day23.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1D0D2DD328B882D8001677F5 /* Day23.txt */; };
 		1D0D2DD628B88304001677F5 /* Day23.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0D2DD528B88304001677F5 /* Day23.swift */; };
+		1DC00D6A295A2A3700E458BB /* Day24.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC00D69295A2A3700E458BB /* Day24.swift */; };
+		1DC00D6C295A4D1F00E458BB /* Day24.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DC00D6B295A4D1F00E458BB /* Day24.txt */; };
 		1DDAA13928A5FF76008573D1 /* AOC2021App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA13828A5FF76008573D1 /* AOC2021App.swift */; };
 		1DDAA13B28A5FF76008573D1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAA13A28A5FF76008573D1 /* ContentView.swift */; };
 		1DDAA13D28A5FF7B008573D1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DDAA13C28A5FF7B008573D1 /* Assets.xcassets */; };
@@ -64,6 +66,8 @@
 		1D0710D628ADD17200C00CE2 /* Day22.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Day22.txt; sourceTree = "<group>"; };
 		1D0D2DD328B882D8001677F5 /* Day23.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day23.txt; sourceTree = "<group>"; };
 		1D0D2DD528B88304001677F5 /* Day23.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day23.swift; sourceTree = "<group>"; };
+		1DC00D69295A2A3700E458BB /* Day24.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day24.swift; sourceTree = "<group>"; };
+		1DC00D6B295A4D1F00E458BB /* Day24.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day24.txt; sourceTree = "<group>"; };
 		1DDAA13528A5FF76008573D1 /* AOC2021.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AOC2021.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DDAA13828A5FF76008573D1 /* AOC2021App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AOC2021App.swift; sourceTree = "<group>"; };
 		1DDAA13A28A5FF76008573D1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -192,6 +196,7 @@
 				1DDAA1A528A88CFD008573D1 /* Day21.swift */,
 				1DDAA1A928AA0F6D008573D1 /* Day22.swift */,
 				1D0D2DD528B88304001677F5 /* Day23.swift */,
+				1DC00D69295A2A3700E458BB /* Day24.swift */,
 			);
 			path = Code;
 			sourceTree = "<group>";
@@ -222,6 +227,7 @@
 				1DDAA1A728A88D1C008573D1 /* Day21.txt */,
 				1D0710D628ADD17200C00CE2 /* Day22.txt */,
 				1D0D2DD328B882D8001677F5 /* Day23.txt */,
+				1DC00D6B295A4D1F00E458BB /* Day24.txt */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -309,6 +315,7 @@
 				1DDAA1A828A88D1C008573D1 /* Day21.txt in Resources */,
 				1DDAA18728A85DCA008573D1 /* Day13.txt in Resources */,
 				1DDAA18928A85E45008573D1 /* Day11.txt in Resources */,
+				1DC00D6C295A4D1F00E458BB /* Day24.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,6 +327,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DDAA19A28A88C64008573D1 /* Day19.swift in Sources */,
+				1DC00D6A295A2A3700E458BB /* Day24.swift in Sources */,
 				1DDAA15C28A85298008573D1 /* Day5.swift in Sources */,
 				1DDAA19128A88589008573D1 /* Day16.swift in Sources */,
 				1DDAA13B28A5FF76008573D1 /* ContentView.swift in Sources */,
