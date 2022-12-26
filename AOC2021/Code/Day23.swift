@@ -20,13 +20,13 @@ class Day23 {
     
     ///
     ///
-    func getPodFromRoom(_ room: [String]) -> String? {
+    func getPodFromRoom(_ room: String) -> String? {
         for x in room {
             if x != "." {
-                return x
+                return String(x)
             }
         }
-        return nil // TODO: Handle optional downstream
+        return nil
     }
         
     /// Check if the path is clear
@@ -60,7 +60,7 @@ class Day23 {
     ///
     func possibleMoves(board: [String], pos: Int) -> [Int] {
         let x = board[pos]
-        
+
         if !roomPositions.contains(pos) {
             if canReach(board: board, startPos: pos, endPos: roomMapping[x]!) && roomOnlyContainsGoal(board: board, x: x, desiredPos: roomMapping[x]!) {
                 return [roomMapping[x]!]
@@ -69,7 +69,7 @@ class Day23 {
             }
         }
         
-        let movingPod = getPodFromRoom([x])! // TODO: Does this have to be an array?
+        let movingPod = getPodFromRoom(x)!
         if (pos == roomMapping[movingPod]) && roomOnlyContainsGoal(board: board, x: movingPod, desiredPos: pos) {
             return []
         }
@@ -98,7 +98,7 @@ class Day23 {
         // Vars
         var newBoard: [String] = board
         var dist = 0
-        let movingPod = getPodFromRoom([board[pos]])! // TODO: Does this have to be an array?
+        let movingPod = getPodFromRoom(board[pos])!
         
         // Logic
         if board[pos].count == 1 {
@@ -128,12 +128,13 @@ class Day23 {
             newBoard[dest] = movingPod
             return (newBoard, dist * ennergyMapping[movingPod]!)
         } else {
-            // Add to room
             var room = Array(board[dest]).map{String($0)}
             let extraDist = room.filter({ $0 == "." }).count
             room[extraDist - 1] = movingPod
             dist += extraDist
-            return ([room.joined(separator: "")], dist * ennergyMapping[movingPod]!)
+            let temp = room.joined(separator: "")
+            newBoard[dest] = temp
+            return (newBoard, dist * ennergyMapping[movingPod]!)
         }
     }
     
@@ -142,13 +143,15 @@ class Day23 {
         
         var queue = [board]
         while !queue.isEmpty {
+            print(queue.count)
             let board = queue.removeLast()
 
             for (pos, pod) in board.enumerated() {
-                if pod == "." {
+                if getPodFromRoom(pod) == nil {
                     continue
                 }
                 let destinations = possibleMoves(board: board, pos: pos)
+
                 for destination in destinations {
                     let (newBoard, extraCost) = move(board: board, pos: pos, dest: destination)
                     let newCost = states[board]! + extraCost
@@ -167,14 +170,13 @@ class Day23 {
                 }
             }
         }
-        
         return states
     }
                 
     func part1() -> String {
         let board = [".", ".", "BA", ".", "CD", ".", "BC", ".", "DA", ".", "."]
         let sol = solve(board)
-        let sol2 = sol[[".", ".", "AA", ".", "BB", ".", "CC", ".", "DD", ".", "."]] ?? -1
+        let sol2 = sol[[".", ".", "AA", ".", "BB", ".", "CC", ".", "DD", ".", "."]]!
         
         print(sol)
         print()
