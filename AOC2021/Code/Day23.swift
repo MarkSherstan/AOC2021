@@ -33,8 +33,8 @@ class Day23 {
         }
     }
     
-    ///
-    ///
+    /// Get pod from a room
+    /// - Returns: The pod letter if avilable, otherwise return nil and deal with optional downstream
     func getPodFromRoom(_ room: String) -> String? {
         for x in room {
             if x != "." {
@@ -68,14 +68,15 @@ class Day23 {
     /// - Returns: True if room only contains goal or single goal and nothing else, false for any other case
     func roomOnlyContainsGoal(board: [String], x: String, desiredPos: Int) -> Bool {
         let inRoom = board[desiredPos]
-        return inRoom.count == (inRoom.filter{$0 == "."}.count + inRoom.filter{String($0) == x}.count) // TODO: Is this effcient?
+        return inRoom.count == (inRoom.filter{$0 == "."}.count + inRoom.filter{String($0) == x}.count)
     }
     
-    ///
-    ///
+    /// Calculate the possible move that can be executed
+    /// - Returns: Integer array of potential locations that pod can move to
     func possibleMoves(board: [String], pos: Int) -> [Int] {
         let x = board[pos]
 
+        // Not in a room, in the hallway
         if !roomPositions.contains(pos) {
             if canReach(board: board, startPos: pos, endPos: roomMapping[x]!) && roomOnlyContainsGoal(board: board, x: x, desiredPos: roomMapping[x]!) {
                 return [roomMapping[x]!]
@@ -84,11 +85,13 @@ class Day23 {
             }
         }
         
+        // In a room
         let movingPod = getPodFromRoom(x)!
         if (pos == roomMapping[movingPod]) && roomOnlyContainsGoal(board: board, x: movingPod, desiredPos: pos) {
             return []
         }
         
+        // Build out the combos
         var possible: [Int] = []
         for dest in 0..<board.count {
             if dest == pos {
@@ -109,6 +112,8 @@ class Day23 {
         return possible
     }
     
+    /// Move a pod inside a board based off its current position and a destination
+    /// - Returns: Tuple holding a string array of what the new board looks like and the associated cost
     func move(board: [String], pos: Int, dest: Int) -> ([String], Int) {
         // Vars
         var newBoard: [String] = board
@@ -136,9 +141,9 @@ class Day23 {
             }
             newBoard[pos] = newRoom
         }
-        
         dist += abs(pos - dest)
         
+        // Return different cases
         if board[dest].count == 1 {
             newBoard[dest] = movingPod
             return (newBoard, dist * ennergyMapping[movingPod]!)
@@ -153,6 +158,8 @@ class Day23 {
         }
     }
     
+    /// General function for solving the problem. Keep track of states in a dict and queue -> Dijkstra swag
+    /// - Returns: Integer solution in string form
     func solve(board: [String], goal: [String]) -> String {
         var states: [[String]: Int] = [board: 0]
         var queue = [board]
