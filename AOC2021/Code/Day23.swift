@@ -138,12 +138,11 @@ class Day23 {
         }
     }
     
-    func solve(_ board: [String]) -> [[String]: Int] {
+    func solve(board: [String], goal: [String]) -> String {
         var states: [[String]: Int] = [board: 0]
-        
         var queue = [board]
+        
         while !queue.isEmpty {
-            print(queue.count)
             let board = queue.removeLast()
 
             for (pos, pod) in board.enumerated() {
@@ -170,20 +169,18 @@ class Day23 {
                 }
             }
         }
-        return states
+        return String(states[goal]!)
     }
-                
+    
     func part1() -> String {
-        let board = [".", ".", "BA", ".", "CD", ".", "BC", ".", "DA", ".", "."]
-        let sol = solve(board)
-        let sol2 = sol[[".", ".", "AA", ".", "BB", ".", "CC", ".", "DD", ".", "."]]!
-        
-        print(sol)
-        print()
-        return String(sol2)
+        let input = [".", ".", "AC", ".", "DC", ".", "AD", ".", "BB", ".", "."]
+        let goal = [".", ".", "AA", ".", "BB", ".", "CC", ".", "DD", ".", "."]
+        return solve(board: input, goal: goal)
     }
     
     func part2() -> String {
-        return "B"
+        let input = [".", ".", "ADDC", ".", "DCBC", ".", "ABAD", ".", "BACB", ".", "."]
+        let goal = [".", ".", "AAAA", ".", "BBBB", ".", "CCCC", ".", "DDDD", ".", "."]
+        return solve(board: input, goal: goal)
     }
 }
