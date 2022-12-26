@@ -8,15 +8,30 @@
 import Foundation
 
 class Day23 {
+    // Vars
     let ennergyMapping: [String: Int] = ["A": 1, "B": 10, "C": 100, "D": 1000]
     let roomMapping: [String: Int] = ["A": 2, "B": 4, "C": 6, "D": 8]
     let roomPositions: [Int] = [2, 4, 6, 8]
+    var p1Input: [String] = Array(repeating: ".", count: 11)
+    var p2Input: [String] = Array(repeating: ".", count: 11)
     
-//    init() {
-//        // Load in data (do this parsing later)
-//        let url = Bundle.main.url(forResource: "Day23", withExtension: "txt")!
-//        let input = try! String(contentsOf: url).split(separator: "\n")
-//    }
+    init() {
+        // Load in data (minor hardcoded values)
+        let url = Bundle.main.url(forResource: "Day23", withExtension: "txt")!
+        let input = try! String(contentsOf: url).split(separator: "\n")
+        let upper = input[2].replacingOccurrences(of: "#", with: "").replacingOccurrences(of: " ", with: "")
+        let lower = input[3].replacingOccurrences(of: "#", with: "").replacingOccurrences(of: " ", with: "")
+        let midUpper = "#D#C#B#A#".replacingOccurrences(of: "#", with: "")
+        let midLower = "#D#B#A#C#".replacingOccurrences(of: "#", with: "")
+        
+        // Populate array with the sequenced data
+        var idx = 2
+        for i in 0..<upper.count {
+            p1Input[idx] = String(upper[i]) + String(lower[i])
+            p2Input[idx] = String(upper[i]) + String(midUpper[i]) + String(midLower[i]) + String(lower[i])
+            idx += 2
+        }
+    }
     
     ///
     ///
@@ -172,15 +187,15 @@ class Day23 {
         return String(states[goal]!)
     }
     
+    /// Part 1
     func part1() -> String {
-        let input = [".", ".", "AC", ".", "DC", ".", "AD", ".", "BB", ".", "."]
         let goal = [".", ".", "AA", ".", "BB", ".", "CC", ".", "DD", ".", "."]
-        return solve(board: input, goal: goal)
+        return solve(board: p1Input, goal: goal)
     }
     
+    /// Part 2
     func part2() -> String {
-        let input = [".", ".", "ADDC", ".", "DCBC", ".", "ABAD", ".", "BACB", ".", "."]
         let goal = [".", ".", "AAAA", ".", "BBBB", ".", "CCCC", ".", "DDDD", ".", "."]
-        return solve(board: input, goal: goal)
+        return solve(board: p2Input, goal: goal)
     }
 }
