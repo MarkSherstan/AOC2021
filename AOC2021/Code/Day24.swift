@@ -22,16 +22,18 @@ class Day24 {
         monad = try! String(contentsOf: url).split(separator: "\n")
     }
     
-    func solve() -> Bool {
+    func solve(modelNumber: [Int]) -> Bool {
         // Vars start at zero
         var data: [String: Int] = ["w": 0, "x": 0, "y": 0, "z": 0]
+        var idx = 0
         
         // Loop through monad instructions
         for mon in monad {
             let parts = mon.components(separatedBy: " ")
             
             if parts[0] == "inp" {
-                data["w"] = 1
+                data["w"] = modelNumber[idx]
+                idx += 1
             } else {
                 let A = data[parts[1]]!
                 var B: Int
@@ -70,9 +72,23 @@ class Day24 {
         }
     }
     
+    func numGen() {
+        for i in (1...99999999999999).reversed() {
+            let strNum = String(i)
+            
+            if !strNum.contains("0") {
+                if solve(modelNumber: strNum.compactMap { Int(String($0)) }) {
+                    print(i)
+                    break
+                }
+                print(i)
+            }
+        }
+    }
+    
     /// Part 1
     func part1() -> String {
-        solve()
+        numGen()
         return "A"
     }
     
