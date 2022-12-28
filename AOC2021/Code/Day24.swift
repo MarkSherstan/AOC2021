@@ -7,100 +7,54 @@
 
 import Foundation
 
-extension String {
-    var isInt: Bool {
-        return Int(self) != nil
-    }
-}
-
 class Day24 {
-    var monad: [Substring]
+    // Create struct and array holding A, B, C constants
+    struct Constants {
+        var A: Int
+        var B: Int
+        var C: Int
+    }
+    var constArray: [Constants] = []
     
     init() {
         // Load in data
         let url = Bundle.main.url(forResource: "Day24", withExtension: "txt")!
-        monad = try! String(contentsOf: url).split(separator: "\n")
+        let monad = try! String(contentsOf: url).split(separator: "\n")
+        let monadChunk = monad.chunked(into: 18)
+        
+        // Extract and save
+        var A, B, C: Int
+        for chunk in monadChunk {
+            A = Int(chunk[4].components(separatedBy: " ")[2])!
+            B = Int(chunk[5].components(separatedBy: " ")[2])!
+            C = Int(chunk[15].components(separatedBy: " ")[2])!
+            constArray.append(Constants(A: A, B: B, C: C))
+        }
     }
     
-    func solve(modelNumber: [Int]) -> Bool {
-        // Vars start at zero
-        var data: [String: Int] = ["w": 0, "x": 0, "y": 0, "z": 0]
-        var idx = 0
+    func solve(modelNumber: [Int]) {
+        var stack: [Int] = []
         
-        // Loop through monad instructions
-        for mon in monad {
-            let parts = mon.components(separatedBy: " ")
-            
-            if parts[0] == "inp" {
-                data["w"] = modelNumber[idx]
-                idx += 1
-            } else {
-                let A = data[parts[1]]!
-                var B: Int
-                
-                if parts[2].isInt {
-                    B = Int(parts[2])!
-                } else {
-                    B = data[parts[2]]!
-                }
-                                
-                switch parts[0] {
-                case "add":
-                    data[parts[1]] = A + B
-                case "mul":
-                    data[parts[1]] = A * B
-                case "div":
-                    data[parts[1]] = Int(A / B)
-                case "mod":
-                    data[parts[1]] = A % B
-                case "eql":
-                    if A == B {
-                        data[parts[1]] = 1
-                    } else {
-                        data[parts[1]] = 0
-                    }
-                default:
-                    print("ERROR")
-                }
+        for (i, const) in constArray.enumerated() {
+            if const.A == 1 {
+                stack.append(<#T##newElement: Int##Int#>)
+            } else if const.A == 26 {
+                print(26)
             }
-        }
-        
-        if data["z"]! == 0 {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    func numGen() {
-        for i in (1...99999999999999).reversed() {
-            print(i)
-            
-//            let strNum = String(i)
-//
-//            if !strNum.contains("0") {
-//                if solve(modelNumber: strNum.compactMap { Int(String($0)) }) {
-//                    print(i)
-//                    break
-//                }
-//                print(i)
-//            }
         }
     }
     
     /// Part 1
     func part1() -> String {
-        numGen()
+        solve(modelNumber: Array(repeating: 1, count: 14))
         return "A"
     }
     
     /// Part 2
     func part2() -> String {
-        
         return "B"
     }
 }
-
 
 // Breakdown:
 //    inp w       w = w
@@ -151,7 +105,7 @@ class Day24 {
 //    For the case: A == 1 -> (10 <= B <= 13)
 //
 //    w = input
-//    x = ((z % 26) + B) != w -> Must be true otherwise we never get 0
+//    x = ((z % 26) + B) != w -> Must be 1 otherwise we never get z=0
 //    z = Int(z/A) -> A is 1, this is not a required operation
 //    z *= (25*x + 1)
 //    z += (w+C)*x
@@ -161,3 +115,14 @@ class Day24 {
 //    z += (w+C)
 //
 //    z = (z * 26) + w + C
+//
+//
+//
+//    For the case: A == 26
+//
+//    w = input
+//    x = ((z % 26) + B) != w -> Must be false
+//    z = Int(z/A)
+//    z *= (25*x + 1)
+//    z += (w+C)*x
+//
