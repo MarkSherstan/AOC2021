@@ -32,27 +32,41 @@ class Day24 {
         }
     }
     
-    func solve(modelNumber: [Int]) {
+    /// Solver (see breakdown comments below)
+    func solve(modelNumber: inout [Int]) -> String {
         var stack: [(Int, Int)] = []
+        var sol = ""
         
         for (i, const) in constArray.enumerated() {
             if const.A == 1 {
                 stack.append((i, const.C))
             } else if const.A == 26 {
-                print(26)
+                let (j, C) = stack.removeLast()
+                modelNumber[i] = modelNumber[j] + C + const.B
+               
+                if modelNumber[i] > 9 {
+                    modelNumber[j] -= (modelNumber[i] - 9)
+                    modelNumber[i] = 9
+                } else if modelNumber[i] < 1 {
+                    modelNumber[j] += (1 - modelNumber[i])
+                    modelNumber[i] = 1
+                }
             }
         }
+        _ = modelNumber.map{ sol = sol + "\($0)" }
+        return sol
     }
     
     /// Part 1
     func part1() -> String {
-        solve(modelNumber: Array(repeating: 1, count: 14))
-        return "A"
+        var base = Array(repeating: 9, count: 14)
+        return solve(modelNumber: &base)
     }
     
     /// Part 2
     func part2() -> String {
-        return "B"
+        var base = Array(repeating: 1, count: 14)
+        return solve(modelNumber: &base)
     }
 }
 
