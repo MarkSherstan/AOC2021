@@ -33,11 +33,11 @@ class Day24 {
     }
     
     func solve(modelNumber: [Int]) {
-        var stack: [Int] = []
+        var stack: [(Int, Int)] = []
         
         for (i, const) in constArray.enumerated() {
             if const.A == 1 {
-                stack.append(<#T##newElement: Int##Int#>)
+                stack.append((i, const.C))
             } else if const.A == 26 {
                 print(26)
             }
@@ -105,7 +105,7 @@ class Day24 {
 //    For the case: A == 1 -> (10 <= B <= 13)
 //
 //    w = input
-//    x = ((z % 26) + B) != w -> Must be 1 otherwise we never get z=0
+//    x = ((z % 26) + B) != w -> (B > 10 and w < 9 therefore always 1)
 //    z = Int(z/A) -> A is 1, this is not a required operation
 //    z *= (25*x + 1)
 //    z += (w+C)*x
@@ -121,8 +121,16 @@ class Day24 {
 //    For the case: A == 26
 //
 //    w = input
-//    x = ((z % 26) + B) != w -> Must be false
-//    z = Int(z/A)
+//    x = ((z % 26) + B) != w -> This must be zero for a solution (z will carry through)
+//    z = Int(z/A) -> A will be 26
 //    z *= (25*x + 1)
 //    z += (w+C)*x
 //
+//    w = input
+//    x = ((z % 26) + B) != w   ->   Must be zero (should equal) was also *26 so   ->  (w_i + C) + B == w _new
+//    z = Int(z/26)     -> Int((w_i + C) / 26) = 0
+//    z *= (25*x + 1)   -> 0
+//    z += (w+C)*x      -> 0
+//
+//
+//    Therefore the magic equation with pushes and pops is: (w_i + C) + B == w _new
