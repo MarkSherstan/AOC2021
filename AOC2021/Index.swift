@@ -139,6 +139,10 @@ class Index {
             let d24 = Day24()
             p1 = d24.part1()
             p2 = d24.part2()
+        case "Day 25":
+            let d25 = Day25()
+            p1 = d25.part1()
+            p2 = d25.part2()
         default:
             p1 = "NA"
             p2 = "NA"
