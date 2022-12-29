@@ -44,21 +44,24 @@ class Day25 {
         matrix = Matrix(matrix: temp)
     }
     
-    func moveHorizontal(matrix: inout Matrix) {
+    // Execute move commands
+    func move(matrix: inout Matrix) {
         for row in 0..<matrix.rows {
             for col in 0..<matrix.cols {
-                if matrix.mat[row][col] == "." {
+                if matrix.mat[row][col] != ">" {
                     continue
                 }
                 
                 if (col + 1) < matrix.cols {
-                    if matrix.mat[row][col] == ">" && matrix.mat[row][col + 1] == "." {
+                    // In bounds
+                    if matrix.mat[row][col + 1] == "." {
                         matrix.mat2[row][col + 1] = ">"
                     } else {
                         matrix.mat2[row][col] = ">"
                     }
                 } else {
-                    if matrix.mat[row][col] == ">" && matrix.mat[row][0] == "." {
+                    // Out of bounds
+                    if matrix.mat[row][0] == "." {
                         matrix.mat2[row][0] = ">"
                     } else {
                         matrix.mat2[row][col] = ">"
@@ -66,23 +69,23 @@ class Day25 {
                 }
             }
         }
-    }
-    
-    func moveVertical(matrix: inout Matrix) {
+        
         for row in 0..<matrix.rows {
             for col in 0..<matrix.cols {
-                if matrix.mat[row][col] == "." {
+                if matrix.mat[row][col] != "v" {
                     continue
                 }
                 
                 if (row + 1) < matrix.rows {
-                    if matrix.mat[row][col] == "v" && matrix.mat[row + 1][col] == "." {
+                    // In bounds
+                    if matrix.mat2[row + 1][col] == "." && matrix.mat[row + 1][col] != "v" {
                         matrix.mat2[row + 1][col] = "v"
                     } else {
                         matrix.mat2[row][col] = "v"
                     }
                 } else {
-                    if matrix.mat[row][col] == "v" && matrix.mat[0][col] == "." {
+                    // Out of bounds
+                    if matrix.mat2[0][col] == "." && matrix.mat[0][col] != "v" {
                         matrix.mat2[0][col] = "v"
                     } else {
                         matrix.mat2[row][col] = "v"
@@ -92,31 +95,26 @@ class Day25 {
         }
     }
     
-    func solve() {
-        var i = 0
+    // Generic solve function
+    func solve() -> String {
+        var i = 1
         while true {
-            moveHorizontal(matrix: &matrix)
-            moveVertical(matrix: &matrix)
-            
-            i += 1
-            
+            move(matrix: &matrix)
             if matrix.mat == matrix.mat2 {
-                break
+                return String(i)
             }
-            
             matrix.update()
-            print(i)
+            i += 1
         }
     }
     
     /// Part 1
     func part1() -> String {
-        solve()
-        return "A"
+        return solve()
     }
     
     /// Part 2
     func part2() -> String {
-        return "B"
+        return "NA"
     }
 }
