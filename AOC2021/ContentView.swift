@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    var idx = Index(numDays: 24)
-    @State private var selection = "Day 24"
+    var idx = Index(numDays: 25)
+    @State private var selection = "Day 25"
     @State private var p1Result: String = ""
     @State private var p2Result: String = ""
     @State private var solveTime: String = ""
